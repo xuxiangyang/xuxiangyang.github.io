@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://xuxiangyang.github.io/sitemap.xml 
