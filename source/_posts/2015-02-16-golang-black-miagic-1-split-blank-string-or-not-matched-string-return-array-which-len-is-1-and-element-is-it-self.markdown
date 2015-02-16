@@ -55,6 +55,6 @@ categories:
     1
     "a"
 
-所以这个坑一个可能的避免方法是这样的，在golang中如果一个字符串能够正确的分割string，返回的一定是长度至少为2个array。所以是合理的。。。。。。
+所以这个坑暂时没有解决办法，有想法的可以交流下~~~
 
 [Golang关于这个东西的讨论](https://groups.google.com/forum/#!topic/golang-nuts/S7U1iRmuydg)
