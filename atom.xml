@@ -4,7 +4,7 @@
   <title><![CDATA[徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2015-02-11T11:21:01+08:00</updated>
+  <updated>2015-02-16T11:31:01+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -12,5 +12,70 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2015/02/16/golang-black-miagic-1-split-blank-string-or-not-matched-string-return-array-which-len-is-1-and-element-is-it-self/"/>
+    <updated>2015-02-16T10:43:52+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2015/02/16/golang-black-miagic-1-split-blank-string-or-not-matched-string-return-array-which-len-is-1-and-element-is-it-self</id>
+    <content type="html"><![CDATA[<p>学习golang一小段时间了，深深被其敢于改变的特性所吸引。但有时也不免改动过大，让人难以理解</p>
+
+<p>这是一个随手笔记，可能会有错误。。。。。</p>
+
+<p>直接上代码</p>
+
+<pre><code>package main
+
+import (
+    "fmt"
+    "strings"
+)
+
+func main() {
+    fmt.Println(strings.Split("", "ss"))
+    fmt.Println(strings.Split("a", "ss"))
+}
+</code></pre>
+
+<p>它将有如下输出</p>
+
+<pre><code>[""]
+["a"]
+</code></pre>
+
+<p>所以在golang中认为split失败时需要返回一个Array，这个Array的元素是其本身。其他语言(至少在我的认识中)则认为返回一个空Array。这是对我而言一个坑。因为如果这样使用，会有问题</p>
+
+<pre><code>package main
+
+import (
+    "fmt"
+    "strings"
+)
+
+func main() {
+    fmt.Println(strings.Split("", "ss"))
+    for _, word := range strings.Split("a", "ss") {
+        fmt.Println(word)
+    }
+}
+</code></pre>
+
+<p>我希望它是输入(所有的双引号只是用来区分字符串长度什么的，真正的输出是不会有双引号的)</p>
+
+<pre><code>0
+"" //空字符串
+</code></pre>
+
+<p>但它的输出会是这个样子</p>
+
+<pre><code>1
+"a"
+</code></pre>
+
+<p>所以这个坑一个可能的避免方法是这样的，在golang中如果一个字符串能够正确的分割string，返回的一定是长度至少为2个array。所以是合理的。。。。。。</p>
+
+<p><a href="https://groups.google.com/forum/#!topic/golang-nuts/S7U1iRmuydg">Golang关于这个东西的讨论</a></p>
+]]></content>
+  </entry>
   
 </feed>

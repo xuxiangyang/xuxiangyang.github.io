@@ -9,7 +9,8 @@
   <meta name="author" content="徐向阳">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts GitHub Repos Status updating... @xuxiangyang on GitHub ">
+  <meta name="description" content="学习golang一小段时间了，深深被其敢于改变的特性所吸引。但有时也不免改动过大，让人难以理解 这是一个随手笔记，可能会有错误。。。。。 直接上代码 package main import ( "fmt" "strings"
+) func main() { fmt.Println(strings. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +67,91 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/02/16/golang-black-miagic-1-split-blank-string-or-not-matched-string-return-array-which-len-is-1-and-element-is-it-self/">Golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-02-16T10:43:52+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:43 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>学习golang一小段时间了，深深被其敢于改变的特性所吸引。但有时也不免改动过大，让人难以理解</p>
+
+<p>这是一个随手笔记，可能会有错误。。。。。</p>
+
+<p>直接上代码</p>
+
+<pre><code>package main
+
+import (
+    "fmt"
+    "strings"
+)
+
+func main() {
+    fmt.Println(strings.Split("", "ss"))
+    fmt.Println(strings.Split("a", "ss"))
+}
+</code></pre>
+
+<p>它将有如下输出</p>
+
+<pre><code>[""]
+["a"]
+</code></pre>
+
+<p>所以在golang中认为split失败时需要返回一个Array，这个Array的元素是其本身。其他语言(至少在我的认识中)则认为返回一个空Array。这是对我而言一个坑。因为如果这样使用，会有问题</p>
+
+<pre><code>package main
+
+import (
+    "fmt"
+    "strings"
+)
+
+func main() {
+    fmt.Println(strings.Split("", "ss"))
+    for _, word := range strings.Split("a", "ss") {
+        fmt.Println(word)
+    }
+}
+</code></pre>
+
+<p>我希望它是输入(所有的双引号只是用来区分字符串长度什么的，真正的输出是不会有双引号的)</p>
+
+<pre><code>0
+"" //空字符串
+</code></pre>
+
+<p>但它的输出会是这个样子</p>
+
+<pre><code>1
+"a"
+</code></pre>
+
+<p>所以这个坑一个可能的避免方法是这样的，在golang中如果一个字符串能够正确的分割string，返回的一定是长度至少为2个array。所以是合理的。。。。。。</p>
+
+<p><a href="https://groups.google.com/forum/#!topic/golang-nuts/S7U1iRmuydg">Golang关于这个东西的讨论</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -77,6 +163,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/02/16/golang-black-miagic-1-split-blank-string-or-not-matched-string-return-array-which-len-is-1-and-element-is-it-self/">Golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]</a>
+      </li>
     
   </ul>
 </section>
