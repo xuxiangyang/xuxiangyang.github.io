@@ -3,7 +3,7 @@ layout: post
 title: "golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]"
 date: 2015-02-16 10:43:52 +0800
 comments: true
-categories:
+categories: golang
 ---
 
 学习golang一小段时间了，深深被其敢于改变的特性所吸引。但有时也不免改动过大，让人难以理解
