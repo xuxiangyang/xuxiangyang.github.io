@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[徐向阳]]></title>
-  <link href="http://xuxiangyang.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Golang | 徐向阳]]></title>
+  <link href="http://xuxiangyang.github.io/blog/categories/golang/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
   <updated>2015-03-08T01:16:08+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
