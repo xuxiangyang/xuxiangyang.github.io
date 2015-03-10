@@ -4,7 +4,7 @@
   <title><![CDATA[徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2015-03-08T14:08:56+08:00</updated>
+  <updated>2015-03-10T21:46:03+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -42,8 +42,10 @@ ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是
 <h3>包管理</h3>
 
 <ul>
-<li><strong>gopm</strong> 类似于ruby的gem，最主要的是它解决了我对于多个项目GOPATH应用的困惑</li>
+<li><strong>gopm</strong> 类似于ruby的gem，最主要的是它解决了我对于多个项目GOPATH应用的。他的配置我没有搞懂。。。</li>
 <li><strong>godep</strong> 和gopm类似，不过它的‘Gemfile’是一个json。</li>
+<li><strong>gom</strong> 最终选择了这个，因为它首先可以在每个项目使用独立的库管理。另外，我可以把它当做go工具来用。也支持lock</li>
+<li><strong>gpm</strong> 非常轻量级，使用起来简单。他就管下载不同版本的包，使用不同版本的包。配个<strong>gvp</strong>使用，可以管理GOPATH。但是操作有点复杂，并且在我zsh下gvp还会挂。。。算了</li>
 </ul>
 
 
