@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[] - 徐向阳</title>
+  <title>max升级10.10.3后的坑 - 徐向阳</title>
   <meta name="author" content="徐向阳">
 
   
-  <meta name="description" content="学习golang一小段时间了，深深被其敢于改变的特性所吸引。但有时也不免改动过大，让人难以理解 这是一个随手笔记，可能会有错误。。。。。 直接上代码 package main import ( "fmt" "strings"
-) func main() { fmt.Println(strings. &hellip;">
+  <meta name="description" content="ssh 到服务器中文乱码，巨坑，网上查到了解决方案。来自这里。不让mac发送自己的编码过去。方案如下： 这个问题跟Mac的终端程序有关。修正方法是： 编辑Mac系统下/etc/ssh_config这个文件 将其中SendEnv LANG LC_*这一行前面加一个井号，注释掉，保存退出 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -28,7 +27,7 @@
     s.parentNode.insertBefore(hm, s);
     })();
   </script>
-  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2015/02/16/golang-black-miagic-1-split-blank-string-or-not-matched-string-return-array-which-len-is-1-and-element-is-it-self/">
+  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2015/04/09/osx-10-10-3-ssh-server-chinese-messy-code/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="徐向阳" type="application/atom+xml">
@@ -77,7 +76,7 @@
   
   <header>
     
-      <h1 class="entry-title">Golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]</h1>
+      <h1 class="entry-title">max升级10.10.3后的坑</h1>
     
     
       <p class="meta">
@@ -86,70 +85,24 @@
 
 
 
-<time class='entry-date' datetime='2015-02-16T10:43:52+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:43 am</span></time>
+<time class='entry-date' datetime='2015-04-09T17:52:09+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:52 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>学习golang一小段时间了，深深被其敢于改变的特性所吸引。但有时也不免改动过大，让人难以理解</p>
+<div class="entry-content"><ul>
+<li><p>ssh 到服务器中文乱码，巨坑，网上查到了解决方案。来自<a href="http://kqwd.blog.163.com/blog/static/41223448201211604620454/">这里</a>。不让mac发送自己的编码过去。方案如下：</p>
 
-<p>这是一个随手笔记，可能会有错误。。。。。</p>
+<p>  这个问题跟Mac的终端程序有关。修正方法是：</p>
 
-<p>直接上代码</p>
+<p>  编辑Mac系统下/etc/ssh_config这个文件
+  将其中SendEnv LANG LC_*这一行前面加一个井号，注释掉，保存退出</p>
 
-<pre><code>package main
+<p>  再使用ssh连接远程Linux服务器时，中文就不会有问题了~</p></li>
+</ul>
 
-import (
-    "fmt"
-    "strings"
-)
-
-func main() {
-    fmt.Println(strings.Split("", "ss"))
-    fmt.Println(strings.Split("a", "ss"))
-}
-</code></pre>
-
-<p>它将有如下输出</p>
-
-<pre><code>[""]
-["a"]
-</code></pre>
-
-<p>所以在golang中认为split失败时需要返回一个Array，这个Array的元素是其本身。其他语言(至少在我的认识中)则认为返回一个空Array。这是对我而言一个坑。因为如果这样使用，会有问题</p>
-
-<pre><code>package main
-
-import (
-    "fmt"
-    "strings"
-)
-
-func main() {
-    fmt.Println(strings.Split("", "ss"))
-    for _, word := range strings.Split("a", "ss") {
-        fmt.Println(word)
-    }
-}
-</code></pre>
-
-<p>我希望它是输入(所有的双引号只是用来区分字符串长度什么的，真正的输出是不会有双引号的)</p>
-
-<pre><code>0
-"" //空字符串
-</code></pre>
-
-<p>但它的输出会是这个样子</p>
-
-<pre><code>1
-"a"
-</code></pre>
-
-<p>所以这个坑暂时没有解决办法，有想法的可以交流下~~~</p>
-
-<p><a href="https://groups.google.com/forum/#!topic/golang-nuts/S7U1iRmuydg">Golang关于这个东西的讨论</a></p>
 </div>
 
 
@@ -165,12 +118,12 @@ func main() {
 
 
 
-<time class='entry-date' datetime='2015-02-16T10:43:52+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:43 am</span></time>
+<time class='entry-date' datetime='2015-04-09T17:52:09+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:52 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/golang/'>golang</a>
+    <a class='category' href='/blog/categories/mac/'>mac</a>
   
 </span>
 
@@ -186,8 +139,8 @@ func main() {
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2015/03/08/golang-package-list/" title="Previous Post: Golang一些有趣的工具">&laquo; Golang一些有趣的工具</a>
       
-        <a class="basic-alignment right" href="/blog/2015/03/08/golang-package-list/" title="Next Post: Golang一些有趣的工具">Golang一些有趣的工具 &raquo;</a>
       
     </p>
   </footer>

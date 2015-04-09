@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mac | 徐向阳]]></title>
+  <link href="http://xuxiangyang.github.io/blog/categories/mac/atom.xml" rel="self"/>
+  <link href="http://xuxiangyang.github.io/"/>
+  <updated>2015-04-09T17:56:42+08:00</updated>
+  <id>http://xuxiangyang.github.io/</id>
+  <author>
+    <name><![CDATA[徐向阳]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[max升级10.10.3后的坑]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2015/04/09/osx-10-10-3-ssh-server-chinese-messy-code/"/>
+    <updated>2015-04-09T17:52:09+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2015/04/09/osx-10-10-3-ssh-server-chinese-messy-code</id>
+    <content type="html"><![CDATA[<ul>
+<li><p>ssh 到服务器中文乱码，巨坑，网上查到了解决方案。来自<a href="http://kqwd.blog.163.com/blog/static/41223448201211604620454/">这里</a>。不让mac发送自己的编码过去。方案如下：</p>
+
+<p>  这个问题跟Mac的终端程序有关。修正方法是：</p>
+
+<p>  编辑Mac系统下/etc/ssh_config这个文件
+  将其中SendEnv LANG LC_*这一行前面加一个井号，注释掉，保存退出</p>
+
+<p>  再使用ssh连接远程Linux服务器时，中文就不会有问题了~</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
