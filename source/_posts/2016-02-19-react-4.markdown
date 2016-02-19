@@ -1,0 +1,105 @@
+---
+layout: post
+title: "4. 一个基础的React框架雏形"
+date: 2016-02-19 16:26:14 +0800
+comments: true
+categories:
+---
+
+代码在  [react_start_kit](http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/basic_frame)的basic_frame tag上
+
+大致文件结构组织如下。
+
+```
+.
+├── README.md
+├── .git
+├── .gitignore
+├── deploy
+├── m.sublime-project
+├── package.json
+├── src
+│   ├── components
+│   │   ├── Footer
+│   │   │   ├── Footer.css
+│   │   │   └── Footer.js
+│   │   └── Slogan
+│   │       ├── Slogan.css
+│   │       └── Slogan.js
+│   ├── config.js
+│   ├── index.css
+│   ├── index.html
+│   ├── index.js
+│   ├── pages
+│   │   └── HelloWorldPage
+│   │       ├── HelloWorldPage.css
+│   │       └── HelloWorldPage.js
+│   └── vendor
+│       ├── favicon.ico
+│       └── js
+│           └── mtx.js
+├── tools
+│   ├── server.js
+│   └── servers
+│       └── server.js
+├── webpack.config.js
+└── .babelrc
+```
+
+一个基本原则是这样的
+不管是`page`还是`component`，本质上都是一个组件。一个组件是由这样一个文件夹组成的：（以Slogan为例）
+
+1. 文件夹名字与组件相同。所以文件夹名为Slogan
+2. 这个文件下有这个组件需要的所有东西，比如js、css，甚至是图片等。
+3. 文件夹下有一个Slogan.js与Slogan.css。js文件负责组件的显示，资源的整合。css负责组件内的布局，它不用关心组件间该如何排列。
+4. css 的className推荐以组件名作为前缀，并且一个组件的顶级className最好和组件名相同。
+
+最基础的组件，放在components文件夹下。有几个要点
+
+1. 显示的内容最好不要写死，要通过props传递。比如文字内容，最好写进props，然后在Page中初始化。这样能最大程度的重复利用
+2. 组件要分的恰当，不要太大，也不要太小。基本原则是这样的：如果一个组件会在Page或其他Component中使用，那么就独立为一个文件夹。否则这是一个内部组件，放在相应组件即可。以Banner的显示为例
+1. 暴露在外面的是Banner这个组件，一个Banner由多个BannerImage组成，Banner负责控制BannerImage的初始化、轮播
+2. BannerImage寄生在Banner组件中，放在对应的js和css中。
+3. 如果以后有组件需要使用BannerImage，那么可以将它独立为一个文件夹，然后考虑换一个更通用的名字，例如ClickableImage等。
+
+抽象出来了一类特殊的组件，叫做page。建议名字以Page结尾。它也是一个组件，所以文件夹内的文件职责与上面的相同。但它也有一些特殊的地方。
+
+1. 这个是顶层的组件，一个Page就相当于对应了一整个html
+2. 它的css负责调整组件间的相互关系。推荐每个组件加一个class 命名为page，这可以在更高层的css中做处理用
+
+甚至可以在pages和components中抽象出一个layouts层，它也是一个组件，如果两个页面非常像，比如说成绩查询和成绩预约页面，所需要的组件都是相同的，只是小部分文案不同，可以独立出一个layout，然后page渲染layout，layout渲染component
+
+仔细解释下每个文件的作用
+
+```
+.
+├── deploy                                      //部署脚本，使用方法 ./deploy production
+├── m.sublime-project                           //sublime环境，所以我们需要使用subl m.sublime-project。代替subl .这样可以处理jsx的高亮，它是project级别的自定义配置
+├── package.json                                //版本控制
+├── src                                         //项目的源码
+│   ├── components                              //组件
+│   │   ├── Footer
+│   │   │   ├── Footer.css
+│   │   │   └── Footer.js
+│   │   └── Slogan
+│   │       ├── Slogan.css
+│   │       └── Slogan.js
+│   ├── config.js                               //配置js，负责一些常量的配置。比如服务器地址，请求TIMEOUT时间
+│   ├── index.css                               //入口css，负责处理一些全局的坑。可以看看index.css
+│   ├── index.html                              //我们是单页应用，这个是我们的单页HTML
+│   ├── index.js                                //入口js，负责把React绑到HTML上
+│   ├── pages                                   //页面
+│   │   └── HelloWorldPage
+│   │       ├── HelloWorldPage.css
+│   │       └── HelloWorldPage.js
+│   └── vendor                                 //第三方依赖，其实和public很相似。主要用来存储一些下载下来的第三方js库
+│       ├── favicon.ico
+│       └── js
+│           └── mtx.js
+├── tools                                     //调试用的工具
+│   ├── server.js
+│   └── servers
+│       └── server.js
+├── webpack.config.js                         //webpakc的配置
+└── .babelrc                                  //babel的配置
+```

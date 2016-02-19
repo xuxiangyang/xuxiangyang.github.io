@@ -1,0 +1,131 @@
+---
+layout: post
+title: "1. React静态组件基础"
+date: 2016-02-19 16:23:13 +0800
+comments: true
+categories: React
+---
+
+React中最基础的概念就是组件。这篇讲的都是静态组件。也就是写死各种参数。没有变化。所以暂时忽略state
+
+一个组件有一个props，这里面存储了由父元素传递来的属性。整个页面由一颗树组成。
+
+一个最基础的组件定义如下
+
+```
+import React, { Component } from "react"
+class ExampleComponent extends Component {
+  render() {
+    return(
+        <div>
+          这是一个组件的基础形式，有几点需要注意：
+          1. 组件继承自React中的Component
+          2. 组件显示的函数叫render，显示的html元素放在render里
+          3. html比如包在return()中
+          4. html元素只能有一个唯一的父元素
+        </div>
+    )
+  }
+}
+```
+
+一个组件的声明周期由以下几个组成。在第一次绘制的时候如下
+
+```
+getDefaultProps
+getInitialState
+componentWillMount
+render
+componentDidMount
+```
+
+需要注意的是一般`getDefaultProps`和`getInitialState`都是用来初始化props和state的。不要用来做其他的事情。另外，我们一般使用ECMAScript6，所起其实不会有这两个函数~
+一般写法如下：
+
+```
+import React, { Component } from "react"
+class ExampleComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {count: props.initialCount}; //一般在constructor指定默认state
+    this._my_func = this._my_func.bind(this) //这里面一般还会把this传递给自定义的函数，不然函数中访问不到this
+  }
+
+  componentWillMount() {
+    //render前执行
+  }
+
+  componentDidMount() {
+    //render后执行
+  }
+
+  render() {
+    return(
+      <div>
+       <a onClick={this._my_func}>
+        hello
+       </a>
+      </div>
+    )
+  }
+
+  _my_func() { //前面的下划线可以不加
+    this.props //这样就可以访问了
+  }
+}
+ExampleComponent.propTypes = { count: React.PropTypes.number } //用来约束props的类型，js是弱类型的，所以porps最好约束下
+Counter.defaultProps = { count: 0 }; //作用相当于`getDefaultProps`
+```
+
+
+在之后的更新会有这样的流程
+
+```
+componentWillReceivePorps
+shouldComponentUpdate
+componentWillUpdate
+render
+componentDidUpdate
+```
+
+一个组件再消失前会调用
+
+```
+componentWillUnmount
+```
+
+一般用来清理。上面的`componentWillReceivePorps`、`shouldComponentUpdate`、`componentWillUpdate`、`componentDidUpdate`、`componentWillUnmount` 用法都和 `componentWillMount` 类似
+
+所以看一些例子一般组件的用法
+
+```
+import React, { Component } from "react"
+import ReactDOM from 'react-dom';
+class Parent extends Component {
+    render() {
+      return(
+        <Child name="child"/>
+      )
+    }
+}
+
+class Child extends Component {
+  render() {
+    return(
+      <div>
+      {this.props.name} //大括号内的代码是可以执行的
+      </div>
+    )
+  }
+}
+Child.propTypes = { name: React.PropTypes.string }
+
+ReactDOM.render(
+    <Parent/>,
+    document.getElementById("root")
+);
+```
+
+这些例子都可以在 **[react_start_kit_simple](http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/hello_world) 中尝试。使用hello_world这个tag下的代码**
+
+有一些原则，不要修改this.props。永远使用父组件传递下来的props会让你的组件更加简单稳定。组件最好的状态就是一个“死”组件。

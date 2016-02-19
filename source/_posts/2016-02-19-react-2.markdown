@@ -1,0 +1,94 @@
+---
+layout: post
+title: "2. React组件动起来"
+date: 2016-02-19 16:24:27 +0800
+comments: true
+categories: React
+---
+
+所谓动起来，其实就是state。通过需要state可以让页面DOM改变。
+state是什么呢？所谓状态，其实一般就是受用户行为影响的、或者会随着时间改变的东西。
+它和props的区别如下：
+
+1. props是父级传递下来的，在子级内不可以改变。state是子级内部的，是可以改变的。
+2. props是静态的，它一般用来构成html的“骨架”。父级可以将自己的state当作props传递给子级， 对子级而言，得到的props是静态的。
+
+举个例子，form提交。
+
+```
+import React, { Component } from "react"
+class ExampleForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {username: "defaultUserName"};
+  }
+  render() {
+    return(
+        <form action="/test">
+            <input value={this.state.username}/>
+        </form>
+    )
+  }
+}
+```
+
+效果如
+[Image: file:///-/blob/JIHAAAqTc9C/6K58Jv6gf78ZNVLQOuNbTg]但你会发现这个input不能输入，不能删除。这个原因是**React的数据是单向绑定的**。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
+下面会用ref来选取到input，它的作用和css选择器相当。
+
+```
+import React, { Component } from "react"
+class ExampleForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {username: "defaultUserName"};
+    this.onNameChange = this.onNameChange.bind(this); //这句话很重要，它是让onNameChange函数中，也能访问到this。
+  }
+  render() {
+    return(
+        <form action="/test">
+            <input value={this.state.username} onChange={this.onNameChange} ref="username" name="username"/>
+        </form>
+    )
+  }
+  onNameChange() {
+    this.setState({username: this.refs.username.value});
+  }
+}
+```
+
+这里面有几个知识点：
+
+1. this需要bind才能够访问到，js是把函数当作作用域的。
+2. 改变state，不能通过`this.state.username=”ss”`来改变需要通过`setState`改变。同样地props也不能通过`this.props.somePorps = “value”`来改变，要使用`setProps`来改变
+3. ref，相当于css选择器，用来定位到一个html元素
+4. setState只会修改传进去的hash中有的key，假设一个state是`{a: 1, b: 2}`，我们通过`this.setState({b: 3})`，这时，state是`{a: 1, b: 3`}。
+
+
+让这个写法更通用点
+
+```
+class ExampleForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {username: "defaultUserName"};
+  }
+  render() {
+    return(
+        <form action="/test">
+            <input value={this.state.username} onChange={this.onInputChange.bind(this, "username")} ref="username" name="username"/>
+        </form>
+    )
+  }
+  onInputChange(field, ref) {
+    let newState = {};
+    newState[field] = ref.target.value;
+    this.setState(newState);
+  }
+}
+
+ReactDOM.render(
+  <ExampleForm/>,
+  document.getElementById("root")
+);
+```
