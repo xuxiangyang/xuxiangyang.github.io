@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://xuxiangyang.github.io/blog/2016/02/19/react-4/</loc>
+    <lastmod>2016-02-19T16:26:14+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://xuxiangyang.github.io/blog/2016/02/19/react-3/</loc>
+    <lastmod>2016-02-19T16:25:03+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://xuxiangyang.github.io/blog/2016/02/19/react-2/</loc>
+    <lastmod>2016-02-19T16:24:27+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://xuxiangyang.github.io/blog/2016/02/19/react-1/</loc>
+    <lastmod>2016-02-19T16:23:13+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://xuxiangyang.github.io/blog/2016/02/19/react-0/</loc>
+    <lastmod>2016-02-19T16:21:28+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://xuxiangyang.github.io/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux/</loc>
     <lastmod>2016-02-19T16:09:09+08:00</lastmod>
   </url>
@@ -18,10 +38,10 @@
   </url>
   <url>
     <loc>http://xuxiangyang.github.io/blog/archives/</loc>
-    <lastmod>2016-02-19T16:19:23+08:00</lastmod>
+    <lastmod>2016-02-19T16:29:17+08:00</lastmod>
   </url>
   <url>
     <loc>http://xuxiangyang.github.io/</loc>
-    <lastmod>2016-02-19T16:19:23+08:00</lastmod>
+    <lastmod>2016-02-19T16:29:17+08:00</lastmod>
   </url>
 </urlset>

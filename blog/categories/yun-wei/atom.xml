@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 运维 | 徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/blog/categories/yun-wei/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2016-02-19T16:19:23+08:00</updated>
+  <updated>2016-02-19T16:29:17+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -14,13 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[How_to_rescue_sudo_privilege_on_linux]]></title>
+    <title type="html"><![CDATA[一次运维失误，误删deployer Sudo权限]]></title>
     <link href="http://xuxiangyang.github.io/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux/"/>
     <updated>2016-02-19T16:09:09+08:00</updated>
     <id>http://xuxiangyang.github.io/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux</id>
-    <content type="html"><![CDATA[<h1>一次运维失误，误删deployer sudo权限</h1>
-
-<p>经验：
+    <content type="html"><![CDATA[<p>经验：
 不要用usermod来为用户增加组。比较危险</p>
 
 <pre><code>sudo usermod -a -G group user #这是增加
@@ -39,9 +37,9 @@ sudo gpasswd -d user group #移除`
 <h2>方案一，利用服务器自己的recovery mode</h2>
 
 <p>再重启是，上下选择启动项。
-<img src="/images/posts/20160219/1.png">
+{% img /images/posts/20160219/1.png %}
 有可能这个recovery mode 在 advance option里。选择 recovery mode
-<img src="/images/posts/20160219/2.png">
+{% img /images/posts/20160219/2.png %}
 选root那个，使用root登录
 但这个root是一个readonly的系统，需要重新挂在文件系统</p>
 

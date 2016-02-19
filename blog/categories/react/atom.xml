@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: React | 徐向阳]]></title>
+  <link href="http://xuxiangyang.github.io/blog/categories/react/atom.xml" rel="self"/>
+  <link href="http://xuxiangyang.github.io/"/>
+  <updated>2016-02-19T16:29:17+08:00</updated>
+  <id>http://xuxiangyang.github.io/</id>
+  <author>
+    <name><![CDATA[徐向阳]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[3. React剩余的功能]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-3/"/>
+    <updated>2016-02-19T16:25:03+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-3</id>
+    <content type="html"><![CDATA[<h2>Mixin。相当于ruby中的include，我们可以把一些公用的功能提取出来，放在Mixin中。</h2>
+
+<p>使用mixin，你就没办法使用ecma6中的写法了。只能用React.createClass
+例子：</p>
+
+<pre><code>var Mixin = {
+  onInputChange: function(field, ref) {
+    let newState = {};
+    newState[field] = ref.target.value;
+    this.setState(newState);
+  }
+};
+
+var ExampleForm = React.createClass({
+  mixins: [Mixin],
+  getInitialState: function() {
+    return {username: "ss"}
+  },
+  render: function() {
+    return &lt;form action="/test"&gt;
+      &lt;label for="username"&gt;用户名&lt;/label&gt;
+      &lt;input className="form-control" name="username" value={this.state.username} ref="username" name="username" onChange={this.onInputChange.bind(this, "username")}/&gt;
+    &lt;/form&gt;
+  }
+});
+</code></pre>
+
+<p>这样，我们就把通用的功能提取到了一个公用的代码块</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2. React组件动起来]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-2/"/>
+    <updated>2016-02-19T16:24:27+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-2</id>
+    <content type="html"><![CDATA[<p>所谓动起来，其实就是state。通过需要state可以让页面DOM改变。
+state是什么呢？所谓状态，其实一般就是受用户行为影响的、或者会随着时间改变的东西。
+它和props的区别如下：</p>
+
+<ol>
+<li>props是父级传递下来的，在子级内不可以改变。state是子级内部的，是可以改变的。</li>
+<li>props是静态的，它一般用来构成html的“骨架”。父级可以将自己的state当作props传递给子级， 对子级而言，得到的props是静态的。</li>
+</ol>
+
+
+<p>举个例子，form提交。</p>
+
+<pre><code>import React, { Component } from "react"
+class ExampleForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {username: "defaultUserName"};
+  }
+  render() {
+    return(
+        &lt;form action="/test"&gt;
+            &lt;input value={this.state.username}/&gt;
+        &lt;/form&gt;
+    )
+  }
+}
+</code></pre>
+
+<p>效果如
+[Image: file:///-/blob/JIHAAAqTc9C/6K58Jv6gf78ZNVLQOuNbTg]但你会发现这个input不能输入，不能删除。这个原因是<strong>React的数据是单向绑定的</strong>。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
+下面会用ref来选取到input，它的作用和css选择器相当。</p>
+
+<pre><code>import React, { Component } from "react"
+class ExampleForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {username: "defaultUserName"};
+    this.onNameChange = this.onNameChange.bind(this); //这句话很重要，它是让onNameChange函数中，也能访问到this。
+  }
+  render() {
+    return(
+        &lt;form action="/test"&gt;
+            &lt;input value={this.state.username} onChange={this.onNameChange} ref="username" name="username"/&gt;
+        &lt;/form&gt;
+    )
+  }
+  onNameChange() {
+    this.setState({username: this.refs.username.value});
+  }
+}
+</code></pre>
+
+<p>这里面有几个知识点：</p>
+
+<ol>
+<li>this需要bind才能够访问到，js是把函数当作作用域的。</li>
+<li>改变state，不能通过<code>this.state.username=”ss”</code>来改变需要通过<code>setState</code>改变。同样地props也不能通过<code>this.props.somePorps = “value”</code>来改变，要使用<code>setProps</code>来改变</li>
+<li>ref，相当于css选择器，用来定位到一个html元素</li>
+<li>setState只会修改传进去的hash中有的key，假设一个state是<code>{a: 1, b: 2}</code>，我们通过<code>this.setState({b: 3})</code>，这时，state是<code>{a: 1, b: 3</code>}。</li>
+</ol>
+
+
+<p>让这个写法更通用点</p>
+
+<pre><code>class ExampleForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {username: "defaultUserName"};
+  }
+  render() {
+    return(
+        &lt;form action="/test"&gt;
+            &lt;input value={this.state.username} onChange={this.onInputChange.bind(this, "username")} ref="username" name="username"/&gt;
+        &lt;/form&gt;
+    )
+  }
+  onInputChange(field, ref) {
+    let newState = {};
+    newState[field] = ref.target.value;
+    this.setState(newState);
+  }
+}
+
+ReactDOM.render(
+  &lt;ExampleForm/&gt;,
+  document.getElementById("root")
+);
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1. React静态组件基础]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-1/"/>
+    <updated>2016-02-19T16:23:13+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-1</id>
+    <content type="html"><![CDATA[<p>React中最基础的概念就是组件。这篇讲的都是静态组件。也就是写死各种参数。没有变化。所以暂时忽略state</p>
+
+<p>一个组件有一个props，这里面存储了由父元素传递来的属性。整个页面由一颗树组成。</p>
+
+<p>一个最基础的组件定义如下</p>
+
+<pre><code>import React, { Component } from "react"
+class ExampleComponent extends Component {
+  render() {
+    return(
+        &lt;div&gt;
+          这是一个组件的基础形式，有几点需要注意：
+          1. 组件继承自React中的Component
+          2. 组件显示的函数叫render，显示的html元素放在render里
+          3. html比如包在return()中
+          4. html元素只能有一个唯一的父元素
+        &lt;/div&gt;
+    )
+  }
+}
+</code></pre>
+
+<p>一个组件的声明周期由以下几个组成。在第一次绘制的时候如下</p>
+
+<pre><code>getDefaultProps
+getInitialState
+componentWillMount
+render
+componentDidMount
+</code></pre>
+
+<p>需要注意的是一般<code>getDefaultProps</code>和<code>getInitialState</code>都是用来初始化props和state的。不要用来做其他的事情。另外，我们一般使用ECMAScript6，所起其实不会有这两个函数~
+一般写法如下：</p>
+
+<pre><code>import React, { Component } from "react"
+class ExampleComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {count: props.initialCount}; //一般在constructor指定默认state
+    this._my_func = this._my_func.bind(this) //这里面一般还会把this传递给自定义的函数，不然函数中访问不到this
+  }
+
+  componentWillMount() {
+    //render前执行
+  }
+
+  componentDidMount() {
+    //render后执行
+  }
+
+  render() {
+    return(
+      &lt;div&gt;
+       &lt;a onClick={this._my_func}&gt;
+        hello
+       &lt;/a&gt;
+      &lt;/div&gt;
+    )
+  }
+
+  _my_func() { //前面的下划线可以不加
+    this.props //这样就可以访问了
+  }
+}
+ExampleComponent.propTypes = { count: React.PropTypes.number } //用来约束props的类型，js是弱类型的，所以porps最好约束下
+Counter.defaultProps = { count: 0 }; //作用相当于`getDefaultProps`
+</code></pre>
+
+<p>在之后的更新会有这样的流程</p>
+
+<pre><code>componentWillReceivePorps
+shouldComponentUpdate
+componentWillUpdate
+render
+componentDidUpdate
+</code></pre>
+
+<p>一个组件再消失前会调用</p>
+
+<pre><code>componentWillUnmount
+</code></pre>
+
+<p>一般用来清理。上面的<code>componentWillReceivePorps</code>、<code>shouldComponentUpdate</code>、<code>componentWillUpdate</code>、<code>componentDidUpdate</code>、<code>componentWillUnmount</code> 用法都和 <code>componentWillMount</code> 类似</p>
+
+<p>所以看一些例子一般组件的用法</p>
+
+<pre><code>import React, { Component } from "react"
+import ReactDOM from 'react-dom';
+class Parent extends Component {
+    render() {
+      return(
+        &lt;Child name="child"/&gt;
+      )
+    }
+}
+
+class Child extends Component {
+  render() {
+    return(
+      &lt;div&gt;
+      {this.props.name} //大括号内的代码是可以执行的
+      &lt;/div&gt;
+    )
+  }
+}
+Child.propTypes = { name: React.PropTypes.string }
+
+ReactDOM.render(
+    &lt;Parent/&gt;,
+    document.getElementById("root")
+);
+</code></pre>
+
+<p>这些例子都可以在 <strong><a href="http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/hello_world">react_start_kit_simple</a> 中尝试。使用hello_world这个tag下的代码</strong></p>
+
+<p>有一些原则，不要修改this.props。永远使用父组件传递下来的props会让你的组件更加简单稳定。组件最好的状态就是一个“死”组件。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[0.现代前端基础常识]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-0/"/>
+    <updated>2016-02-19T16:21:28+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-0</id>
+    <content type="html"><![CDATA[<h2>npm: 相当于ruby中的bundle，利用package.json管理</h2>
+
+<p>但它的功能更强大，除了包含作者等等基本信息，还用<code>scripts</code>定义了可以执行的脚本。<code>dependencies</code>是你的依赖，就像gem的依赖。<code>devDependencies</code>是你开发时用的工具，里面的东西和ruby中类似于pry等gem相当。几个常用的命令：</p>
+
+<pre><code>npm init //初始化，一个交互式的脚本
+npm install //根据package.json下载依赖，但一般只有第一次会用
+npm install xx --save //下载xx，并且将xx加入 `dependencies 中。常用
+`npm install xx --save-dev //下载xx，并且将xx加入 `devDependencies`` 中。常用`
+</code></pre>
+
+<p>npm负责你程序的脚本，依赖、下载。所以看一个前端，第一个应该看它的package.json</p>
+
+<h2>webpack: 打包工具</h2>
+
+<p>它可以将我们各种js、css、图片。利用各种loader加载好。这样，我们需要任何一个资源（不管是js、css、图片）都可以使用require来加载了。
+它依赖于webpack.config.js。里面会定义各种各样的loader和plugin。之所以可以require各种资源，是因为给他们定义了对应的loader。
+它有一个<code>webpack-dev-server</code>可以用来做开发是起web服务</p>
+
+<h2>babel:  用来转义js，jsx、ecma6、ecma7都由它转义</h2>
+
+<p>js出了各种写法，比如jsx、ecma6、ecma7等等。但很多浏览器不支持这种写法，所以需要babel来进行转义，转义成浏览器支持的形式。babel分成了好多个项目。要注意分清楚。</p>
+
+<h2>JSX: 就是js、html混用，写法类似下面的</h2>
+
+<p>&#8220;`
+React.render(</p>
+
+<h1 className="class">
+{ture ? &#8220;true&#8221; : &#8220;false&#8221;} //大括号内是可以执行的js代码
+</h1>
+
+
+<p>,
+document.getElementById(&lsquo;example&rsquo;)
+);
+&#8220;`</p>
+
+<p>但jsx本身是不被浏览器支持的。他需要babel进行转义。
+他有一些不同</p>
+
+<ol>
+<li><code>class</code>属性变为了<code>className</code>，因为<code>class</code>与js语法冲突</li>
+<li>如果往原生HTML中加入HTML规范中不存在的属性，需要使用<code>data-</code>前缀。例如下面的</li>
+</ol>
+
+
+<p>&#8220;`</p>
+
+<p><div data-custom-attribute="foo"/>
+&#8220;`</p>
+
+<p>这个东西可以用sublime package Babel高亮。每个项目下有一个m.sublime-project。以后的输入用<code>subl m.sublime-project</code>代替<code>subl .</code> 会更合理。直接使用这个项目的特定sublime配置</p>
+
+<h2>ECMA6/ECMA7: 这是js的新规范。里面定义了一些新的语法。同样目前不能被所有浏览器直接执行。需要用babel进行转义。</h2>
+
+<h2>数据绑定</h2>
+
+<p>现在很多库推崇的都是不要直接操作DOM，而是操作虚拟DOM，然后由库来决定真实DOM要不要重新渲染。常见形式有单向绑定和双向绑定。</p>
+
+<ul>
+<li>单向绑定: 可以<strong>通过改变数据改变DOM，不可以通过改变DOM改变数据</strong>。react就是这种方式。整体感觉就是如果想改变DOM，那么就去改变数据。如果数据不变，DOM其实是也不能改变的。这种方式效率高，模型简单。我们只需要考虑数据的改变就好了，但实际使用中form的input会有个小坑（form中的input一般都绑定在一个数据上，如果输入，其实是改变了DOM，数据并没有改变。所以表现出来的现象是不能输入和删除）。</li>
+<li>双向绑定：<strong>通过改变数据改变DOM，也可以通过改变DOM改变数据。</strong>angular采用这种方式。这种方式其实写小应用挺好用，数据和DOM相当于是同一个东西，不会存在单向绑定中form的input的那种问题。但是效率低，并且如果应用复杂后，其实是引入了很多不确定性。</li>
+</ul>
+
+
+<h2>依赖注入</h2>
+
+<p>angular中着重讲的概念。其实就是函数式编程。在js中函数也是对象，函数可以和其他对象一样可以当参数传递。所以会见到很多这种写法</p>
+
+<pre><code>function test(aFunc, params) {
+aFunc(1) // 调用函数
+}
+</code></pre>
+
+<p>使用的时候就是把声明好的函数传进去。在angular中，一般用这种方式把http、route等函数传进去。同样react也会用这种方式，传递一些函数。比如flux/redux中的dispatch、getState等</p>
+]]></content>
+  </entry>
+  
+</feed>
