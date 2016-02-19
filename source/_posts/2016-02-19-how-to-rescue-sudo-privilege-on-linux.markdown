@@ -1,12 +1,10 @@
 ---
 layout: post
-title: "how_to_rescue_sudo_privilege_on_linux"
+title:  一次运维失误，误删deployer sudo权限
 date: 2016-02-19 16:09:09 +0800
 comments: true
 categories: 运维
 ---
-
-# 一次运维失误，误删deployer sudo权限
 
 经验：
 不要用usermod来为用户增加组。比较危险
