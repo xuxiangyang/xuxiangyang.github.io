@@ -4,7 +4,7 @@
   <title><![CDATA[徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2015-04-29T10:00:56+08:00</updated>
+  <updated>2016-02-19T16:19:23+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How_to_rescue_sudo_privilege_on_linux]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux/"/>
+    <updated>2016-02-19T16:09:09+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux</id>
+    <content type="html"><![CDATA[<h1>一次运维失误，误删deployer sudo权限</h1>
+
+<p>经验：
+不要用usermod来为用户增加组。比较危险</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo usermod -a -G group user #这是增加
+</span><span class='line'>sudo usermod -g group user #这是直接将user的组设置为group</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用<code>gpasswd</code>替代会更安全</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo `gpasswd -a user group #增加
+</span><span class='line'>sudo gpasswd -d user group #移除`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后一个sudo 用户的sudo权限消失了怎么办？
+两个方案，都需要停服</p>
+
+<h2>方案一，利用服务器自己的recovery mode</h2>
+
+<p>再重启是，上下选择启动项。
+<img src="http://xuxiangyang.github.io/images/posts/20160219/1.png">
+有可能这个recovery mode 在 advance option里。选择 recovery mode
+<img src="http://xuxiangyang.github.io/images/posts/20160219/2.png">
+选root那个，使用root登录
+但这个root是一个readonly的系统，需要重新挂在文件系统</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mount -rw -o remount /</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后你就</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo `gpasswd -a user group`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>就好了</p>
+
+<h2>方案二，利用linux live mode 挂载硬盘，直接修改文件为用户增加sudo权限</h2>
+
+<p>1.制作一个ubuntu desktop的u盘启动盘
+2.服务器用u盘启动
+3.预览ubuntu（bu an z）
+4.执行fdisk找到硬盘，挂载（假设找到了sda1）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo fdisk -l
+</span><span class='line'>sudo mkdir /mnt/root
+</span><span class='line'>sudo mount /dev/sda1 /mnt/root</span></code></pre></td></tr></table></div></figure>
+
+
+<p>5.去修改文件 /etc/sudoers
+里面加一行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>deployer ALL=(ALL:ALL) ALL</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个是说给deployer增加sudo权限。以前的做法是把deployer加到sudo这个组里。如果没有洁癖，到这里也可以了。
+6.重启服务器，试试<code>sudo ls</code>好不好试
+7.好使的话</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo `gpasswd -a user group`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>8.移掉/etc/sudoers
+9. 重新登录，看看是不是好使了</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[max升级10.10.3后的坑]]></title>
