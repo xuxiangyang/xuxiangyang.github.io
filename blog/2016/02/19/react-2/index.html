@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>2. React组件动起来 - 徐向阳</title>
+  <meta name="author" content="徐向阳">
+
+  
+  <meta name="description" content="所谓动起来，其实就是state。通过需要state可以让页面DOM改变。
+state是什么呢？所谓状态，其实一般就是受用户行为影响的、或者会随着时间改变的东西。
+它和props的区别如下： props是父级传递下来的，在子级内不可以改变。state是子级内部的，是可以改变的。
+props是静态的， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?10a2b5c957044f44e5c82e0be850636b";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2016/02/19/react-2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="徐向阳" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="/stylesheets/fonts.css" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">徐向阳</a></h1>
+  
+    <h2>菜鸡中的战斗机</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="xuxiangyang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">2. React组件动起来</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-02-19T16:24:27+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:24 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>所谓动起来，其实就是state。通过需要state可以让页面DOM改变。
+state是什么呢？所谓状态，其实一般就是受用户行为影响的、或者会随着时间改变的东西。
+它和props的区别如下：</p>
+
+<ol>
+<li>props是父级传递下来的，在子级内不可以改变。state是子级内部的，是可以改变的。</li>
+<li>props是静态的，它一般用来构成html的“骨架”。父级可以将自己的state当作props传递给子级， 对子级而言，得到的props是静态的。</li>
+</ol>
+
+
+<p>举个例子，form提交。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, { Component } from "react"
+</span><span class='line'>class ExampleForm extends Component {
+</span><span class='line'>  constructor(props) {
+</span><span class='line'>    super(props);
+</span><span class='line'>    this.state = {username: "defaultUserName"};
+</span><span class='line'>  }
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>        &lt;form action="/test"&gt;
+</span><span class='line'>            &lt;input value={this.state.username}/&gt;
+</span><span class='line'>        &lt;/form&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果如
+[Image: file:///-/blob/JIHAAAqTc9C/6K58Jv6gf78ZNVLQOuNbTg]但你会发现这个input不能输入，不能删除。这个原因是<strong>React的数据是单向绑定的</strong>。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
+下面会用ref来选取到input，它的作用和css选择器相当。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, { Component } from "react"
+</span><span class='line'>class ExampleForm extends Component {
+</span><span class='line'>  constructor(props) {
+</span><span class='line'>    super(props);
+</span><span class='line'>    this.state = {username: "defaultUserName"};
+</span><span class='line'>    this.onNameChange = this.onNameChange.bind(this); //这句话很重要，它是让onNameChange函数中，也能访问到this。
+</span><span class='line'>  }
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>        &lt;form action="/test"&gt;
+</span><span class='line'>            &lt;input value={this.state.username} onChange={this.onNameChange} ref="username" name="username"/&gt;
+</span><span class='line'>        &lt;/form&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>  onNameChange() {
+</span><span class='line'>    this.setState({username: this.refs.username.value});
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里面有几个知识点：</p>
+
+<ol>
+<li>this需要bind才能够访问到，js是把函数当作作用域的。</li>
+<li>改变state，不能通过<code>this.state.username=”ss”</code>来改变需要通过<code>setState</code>改变。同样地props也不能通过<code>this.props.somePorps = “value”</code>来改变，要使用<code>setProps</code>来改变</li>
+<li>ref，相当于css选择器，用来定位到一个html元素</li>
+<li>setState只会修改传进去的hash中有的key，假设一个state是<code>{a: 1, b: 2}</code>，我们通过<code>this.setState({b: 3})</code>，这时，state是<code>{a: 1, b: 3</code>}。</li>
+</ol>
+
+
+<p>让这个写法更通用点</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class ExampleForm extends Component {
+</span><span class='line'>  constructor(props) {
+</span><span class='line'>    super(props);
+</span><span class='line'>    this.state = {username: "defaultUserName"};
+</span><span class='line'>  }
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>        &lt;form action="/test"&gt;
+</span><span class='line'>            &lt;input value={this.state.username} onChange={this.onInputChange.bind(this, "username")} ref="username" name="username"/&gt;
+</span><span class='line'>        &lt;/form&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>  onInputChange(field, ref) {
+</span><span class='line'>    let newState = {};
+</span><span class='line'>    newState[field] = ref.target.value;
+</span><span class='line'>    this.setState(newState);
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>ReactDOM.render(
+</span><span class='line'>  &lt;ExampleForm/&gt;,
+</span><span class='line'>  document.getElementById("root")
+</span><span class='line'>);</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐向阳</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-02-19T16:24:27+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:24 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/react/'>react</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/19/react-1/" title="Previous Post: 1. React静态组件基础">&laquo; 1. React静态组件基础</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/02/19/react-3/" title="Next Post: 3. React剩余的功能">3. React剩余的功能 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-4/">4. 一个基础的React框架雏形</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-3/">3. React剩余的功能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-2/">2. React组件动起来</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-1/">1. React静态组件基础</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-0/">0.现代前端基础常识</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/xuxiangyang">@xuxiangyang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'xuxiangyang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - 徐向阳 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

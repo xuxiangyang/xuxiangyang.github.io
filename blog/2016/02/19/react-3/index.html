@@ -5,12 +5,30 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Golang一些有趣的工具 - 徐向阳</title>
+  <title>3. React剩余的功能 - 徐向阳</title>
   <meta name="author" content="徐向阳">
 
   
-  <meta name="description" content="最近发现了不少Golang的包，随手记一些我感兴趣的，并且更新吧。这样会轻松很多
-ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是个菜鸡，在类似的库间选择时难免有一些比较搞笑的评判标准。勿喷~~~ web框架 net/http 包，最最好用的小项目包没有之一。写一个小项目， &hellip;">
+  <meta name="description" content="Mixin。相当于ruby中的include，我们可以把一些公用的功能提取出来，放在Mixin中。 使用mixin，你就没办法使用ecma6中的写法了。只能用React.createClass
+例子： 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -28,7 +46,7 @@ ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是
     s.parentNode.insertBefore(hm, s);
     })();
   </script>
-  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2015/03/08/golang-package-list/">
+  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2016/02/19/react-3/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="徐向阳" type="application/atom+xml">
@@ -77,7 +95,7 @@ ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是
   
   <header>
     
-      <h1 class="entry-title">Golang一些有趣的工具</h1>
+      <h1 class="entry-title">3. React剩余的功能</h1>
     
     
       <p class="meta">
@@ -86,52 +104,61 @@ ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是
 
 
 
-<time class='entry-date' datetime='2015-03-08T00:24:06+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:24 am</span></time>
+<time class='entry-date' datetime='2016-02-19T16:25:03+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:25 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>最近发现了不少Golang的包，随手记一些我感兴趣的，并且更新吧。这样会轻松很多
-ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是个菜鸡，在类似的库间选择时难免有一些比较搞笑的评判标准。勿喷~~~</p>
+<div class="entry-content"><h2>Mixin。相当于ruby中的include，我们可以把一些公用的功能提取出来，放在Mixin中。</h2>
 
-<h3>web框架</h3>
+<p>使用mixin，你就没办法使用ecma6中的写法了。只能用React.createClass
+例子：</p>
 
-<ul>
-<li><strong>net/http</strong> 包，最最好用的小项目包没有之一。写一个小项目，没有那么复杂的逻辑，标准包就够用了。大项目，感觉还是有点薄弱。比如路由、参数解析等等。都需要自己研究，虽然说可以使用基本包实现，但是像我这么懒的，既然有现成的，为什么不用呢？</li>
-<li><strong>gin</strong> 对于net/http增强，简单、灵活不简单。貌似比Martini性能更好</li>
-<li><strong>revel</strong> 和 <strong>beego</strong> 都是基于MVC的框架, 都没有仔细读过。个人比较偏向于revel, 比较像rails。</li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var Mixin = {
+</span><span class='line'>  onInputChange: function(field, ref) {
+</span><span class='line'>    let newState = {};
+</span><span class='line'>    newState[field] = ref.target.value;
+</span><span class='line'>    this.setState(newState);
+</span><span class='line'>  }
+</span><span class='line'>};
+</span><span class='line'>
+</span><span class='line'>var ExampleForm = React.createClass({
+</span><span class='line'>  mixins: [Mixin],
+</span><span class='line'>  getInitialState: function() {
+</span><span class='line'>    return {username: "ss"}
+</span><span class='line'>  },
+</span><span class='line'>  render: function() {
+</span><span class='line'>    return &lt;form action="/test"&gt;
+</span><span class='line'>      &lt;label for="username"&gt;用户名&lt;/label&gt;
+</span><span class='line'>      &lt;input className="form-control" name="username" value={this.state.username} ref="username" name="username" onChange={this.onInputChange.bind(this, "username")}/&gt;
+</span><span class='line'>    &lt;/form&gt;
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>包管理</h3>
-
-<ul>
-<li><strong>gopm</strong> 类似于ruby的gem，最主要的是它解决了我对于多个项目GOPATH应用的。他的配置我没有搞懂。。。</li>
-<li><strong>godep</strong> 和gopm类似，不过它的‘Gemfile’是一个json。</li>
-<li><strong>gom</strong> 最终选择了这个，因为它首先可以在每个项目使用独立的库管理。另外，我可以把它当做go工具来用。也支持lock</li>
-<li><strong>gpm</strong> 非常轻量级，使用起来简单。他就管下载不同版本的包，使用不同版本的包。配个<strong>gvp</strong>使用，可以管理GOPATH。但是操作有点复杂，并且在我zsh下gvp还会挂。。。算了</li>
-</ul>
-
-
-<h3>数据库对象映射模型</h3>
-
-<ul>
-<li><strong>xorm</strong> 目前知道这个</li>
-</ul>
-
-
-<h3>路由</h3>
-
-<ul>
-<li><strong>mux</strong> 非常轻量的一个 &lsquo;HTTP request multiplexer&rsquo; 配合net/http使用也挺不错。</li>
-</ul>
-
-
-<p>另外还有redis和mysql的各种包，因为已经有很专业的了，我就根据官方推荐选择啦~~~</p>
-
-<p>暂时就这样，知道了新的，或者我改变了主意。还会更新这个文章的。。。。</p>
+<p>这样，我们就把通用的功能提取到了一个公用的代码块</p>
 </div>
 
 
@@ -147,12 +174,12 @@ ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是
 
 
 
-<time class='entry-date' datetime='2015-03-08T00:24:06+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:24 am</span></time>
+<time class='entry-date' datetime='2016-02-19T16:25:03+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:25 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/golang/'>golang</a>
+    <a class='category' href='/blog/categories/react/'>react</a>
   
 </span>
 
@@ -168,10 +195,10 @@ ps：基本都是还未尝试，评价只是一种自我感觉。另外，我是
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/02/16/golang-black-miagic-1-split-blank-string-or-not-matched-string-return-array-which-len-is-1-and-element-is-it-self/" title="Previous Post: golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]">&laquo; golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]</a>
+        <a class="basic-alignment left" href="/blog/2016/02/19/react-2/" title="Previous Post: 2. React组件动起来">&laquo; 2. React组件动起来</a>
       
       
-        <a class="basic-alignment right" href="/blog/2015/04/09/osx-10-10-3-ssh-server-chinese-messy-code/" title="Next Post: max升级10.10.3后的坑">max升级10.10.3后的坑 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2016/02/19/react-4/" title="Next Post: 4. 一个基础的React框架雏形">4. 一个基础的React框架雏形 &raquo;</a>
       
     </p>
   </footer>

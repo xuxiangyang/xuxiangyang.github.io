@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>4. 一个基础的React框架雏形 - 徐向阳</title>
+  <meta name="author" content="徐向阳">
+
+  
+  <meta name="description" content="代码在 react_start_kit的basic_frame tag上 大致文件结构组织如下。 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+.
+├── &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?10a2b5c957044f44e5c82e0be850636b";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2016/02/19/react-4/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="徐向阳" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="/stylesheets/fonts.css" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">徐向阳</a></h1>
+  
+    <h2>菜鸡中的战斗机</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="xuxiangyang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">4. 一个基础的React框架雏形</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-02-19T16:26:14+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:26 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>代码在  <a href="http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/basic_frame">react_start_kit</a>的basic_frame tag上</p>
+
+<p>大致文件结构组织如下。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>.
+</span><span class='line'>├── README.md
+</span><span class='line'>├── .git
+</span><span class='line'>├── .gitignore
+</span><span class='line'>├── deploy
+</span><span class='line'>├── m.sublime-project
+</span><span class='line'>├── package.json
+</span><span class='line'>├── src
+</span><span class='line'>│   ├── components
+</span><span class='line'>│   │   ├── Footer
+</span><span class='line'>│   │   │   ├── Footer.css
+</span><span class='line'>│   │   │   └── Footer.js
+</span><span class='line'>│   │   └── Slogan
+</span><span class='line'>│   │       ├── Slogan.css
+</span><span class='line'>│   │       └── Slogan.js
+</span><span class='line'>│   ├── config.js
+</span><span class='line'>│   ├── index.css
+</span><span class='line'>│   ├── index.html
+</span><span class='line'>│   ├── index.js
+</span><span class='line'>│   ├── pages
+</span><span class='line'>│   │   └── HelloWorldPage
+</span><span class='line'>│   │       ├── HelloWorldPage.css
+</span><span class='line'>│   │       └── HelloWorldPage.js
+</span><span class='line'>│   └── vendor
+</span><span class='line'>│       ├── favicon.ico
+</span><span class='line'>│       └── js
+</span><span class='line'>│           └── mtx.js
+</span><span class='line'>├── tools
+</span><span class='line'>│   ├── server.js
+</span><span class='line'>│   └── servers
+</span><span class='line'>│       └── server.js
+</span><span class='line'>├── webpack.config.js
+</span><span class='line'>└── .babelrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个基本原则是这样的
+不管是<code>page</code>还是<code>component</code>，本质上都是一个组件。一个组件是由这样一个文件夹组成的：（以Slogan为例）</p>
+
+<ol>
+<li>文件夹名字与组件相同。所以文件夹名为Slogan</li>
+<li>这个文件下有这个组件需要的所有东西，比如js、css，甚至是图片等。</li>
+<li>文件夹下有一个Slogan.js与Slogan.css。js文件负责组件的显示，资源的整合。css负责组件内的布局，它不用关心组件间该如何排列。</li>
+<li>css 的className推荐以组件名作为前缀，并且一个组件的顶级className最好和组件名相同。</li>
+</ol>
+
+
+<p>最基础的组件，放在components文件夹下。有几个要点</p>
+
+<ol>
+<li>显示的内容最好不要写死，要通过props传递。比如文字内容，最好写进props，然后在Page中初始化。这样能最大程度的重复利用</li>
+<li>组件要分的恰当，不要太大，也不要太小。基本原则是这样的：如果一个组件会在Page或其他Component中使用，那么就独立为一个文件夹。否则这是一个内部组件，放在相应组件即可。以Banner的显示为例</li>
+<li>暴露在外面的是Banner这个组件，一个Banner由多个BannerImage组成，Banner负责控制BannerImage的初始化、轮播</li>
+<li>BannerImage寄生在Banner组件中，放在对应的js和css中。</li>
+<li>如果以后有组件需要使用BannerImage，那么可以将它独立为一个文件夹，然后考虑换一个更通用的名字，例如ClickableImage等。</li>
+</ol>
+
+
+<p>抽象出来了一类特殊的组件，叫做page。建议名字以Page结尾。它也是一个组件，所以文件夹内的文件职责与上面的相同。但它也有一些特殊的地方。</p>
+
+<ol>
+<li>这个是顶层的组件，一个Page就相当于对应了一整个html</li>
+<li>它的css负责调整组件间的相互关系。推荐每个组件加一个class 命名为page，这可以在更高层的css中做处理用</li>
+</ol>
+
+
+<p>甚至可以在pages和components中抽象出一个layouts层，它也是一个组件，如果两个页面非常像，比如说成绩查询和成绩预约页面，所需要的组件都是相同的，只是小部分文案不同，可以独立出一个layout，然后page渲染layout，layout渲染component</p>
+
+<p>仔细解释下每个文件的作用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>.
+</span><span class='line'>├── deploy                                      //部署脚本，使用方法 ./deploy production
+</span><span class='line'>├── m.sublime-project                           //sublime环境，所以我们需要使用subl m.sublime-project。代替subl .这样可以处理jsx的高亮，它是project级别的自定义配置
+</span><span class='line'>├── package.json                                //版本控制
+</span><span class='line'>├── src                                         //项目的源码
+</span><span class='line'>│   ├── components                              //组件
+</span><span class='line'>│   │   ├── Footer
+</span><span class='line'>│   │   │   ├── Footer.css
+</span><span class='line'>│   │   │   └── Footer.js
+</span><span class='line'>│   │   └── Slogan
+</span><span class='line'>│   │       ├── Slogan.css
+</span><span class='line'>│   │       └── Slogan.js
+</span><span class='line'>│   ├── config.js                               //配置js，负责一些常量的配置。比如服务器地址，请求TIMEOUT时间
+</span><span class='line'>│   ├── index.css                               //入口css，负责处理一些全局的坑。可以看看index.css
+</span><span class='line'>│   ├── index.html                              //我们是单页应用，这个是我们的单页HTML
+</span><span class='line'>│   ├── index.js                                //入口js，负责把React绑到HTML上
+</span><span class='line'>│   ├── pages                                   //页面
+</span><span class='line'>│   │   └── HelloWorldPage
+</span><span class='line'>│   │       ├── HelloWorldPage.css
+</span><span class='line'>│   │       └── HelloWorldPage.js
+</span><span class='line'>│   └── vendor                                 //第三方依赖，其实和public很相似。主要用来存储一些下载下来的第三方js库
+</span><span class='line'>│       ├── favicon.ico
+</span><span class='line'>│       └── js
+</span><span class='line'>│           └── mtx.js
+</span><span class='line'>├── tools                                     //调试用的工具
+</span><span class='line'>│   ├── server.js
+</span><span class='line'>│   └── servers
+</span><span class='line'>│       └── server.js
+</span><span class='line'>├── webpack.config.js                         //webpakc的配置
+</span><span class='line'>└── .babelrc                                  //babel的配置</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐向阳</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-02-19T16:26:14+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>4:26 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/19/react-3/" title="Previous Post: 3. React剩余的功能">&laquo; 3. React剩余的功能</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-4/">4. 一个基础的React框架雏形</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-3/">3. React剩余的功能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-2/">2. React组件动起来</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-1/">1. React静态组件基础</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-0/">0.现代前端基础常识</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/xuxiangyang">@xuxiangyang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'xuxiangyang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - 徐向阳 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

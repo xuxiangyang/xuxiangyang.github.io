@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 运维 | 徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/blog/categories/yun-wei/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2016-02-28T00:38:23+08:00</updated>
+  <updated>2016-02-28T00:52:37+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -37,9 +37,9 @@ sudo gpasswd -d user group #移除`
 <h2>方案一，利用服务器自己的recovery mode</h2>
 
 <p>再重启是，上下选择启动项。
-{% img /images/posts/20160219/1.png %}
+<img src="/images/posts/20160219/1.png">
 有可能这个recovery mode 在 advance option里。选择 recovery mode
-{% img /images/posts/20160219/2.png %}
+<img src="/images/posts/20160219/2.png">
 选root那个，使用root登录
 但这个root是一个readonly的系统，需要重新挂在文件系统</p>
 

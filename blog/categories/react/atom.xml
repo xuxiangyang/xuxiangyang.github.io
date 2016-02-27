@@ -4,7 +4,7 @@
   <title><![CDATA[Category: React | 徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/blog/categories/react/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2016-02-28T00:38:23+08:00</updated>
+  <updated>2016-02-28T00:52:37+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -316,14 +316,9 @@ document.getElementById(&lsquo;example&rsquo;)
 
 <ol>
 <li><code>class</code>属性变为了<code>className</code>，因为<code>class</code>与js语法冲突</li>
-<li>如果往原生HTML中加入HTML规范中不存在的属性，需要使用<code>data-</code>前缀。例如下面的</li>
+<li>如果往原生HTML中加入HTML规范中不存在的属性，需要使用<code>data-</code>前缀</li>
 </ol>
 
-
-<p>&#8220;`</p>
-
-<p><div data-custom-attribute="foo"/>
-&#8220;`</p>
 
 <p>这个东西可以用sublime package Babel高亮。每个项目下有一个m.sublime-project。以后的输入用<code>subl m.sublime-project</code>代替<code>subl .</code> 会更合理。直接使用这个项目的特定sublime配置</p>
 

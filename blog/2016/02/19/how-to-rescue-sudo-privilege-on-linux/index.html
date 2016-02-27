@@ -5,15 +5,17 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>How_to_rescue_sudo_privilege_on_linux - 徐向阳</title>
+  <title>一次运维失误，误删deployer Sudo权限 - 徐向阳</title>
   <meta name="author" content="徐向阳">
 
   
-  <meta name="description" content="一次运维失误，误删deployer sudo权限 经验：
+  <meta name="description" content="经验：
 不要用usermod来为用户增加组。比较危险 1
 2
 sudo usermod -a -G group user #这是增加
-sudo usermod -g group user #这是直接将user的组设置为group &hellip;">
+sudo usermod -g group user #这是直接将user的组设置为group 用gpasswd替代会更安全 1
+2
+sudo `gpasswd - &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,7 +82,7 @@ sudo usermod -g group user #这是直接将user的组设置为group &hellip;">
   
   <header>
     
-      <h1 class="entry-title">How_to_rescue_sudo_privilege_on_linux</h1>
+      <h1 class="entry-title">一次运维失误，误删deployer Sudo权限</h1>
     
     
       <p class="meta">
@@ -96,9 +98,7 @@ sudo usermod -g group user #这是直接将user的组设置为group &hellip;">
   </header>
 
 
-<div class="entry-content"><h1>一次运维失误，误删deployer sudo权限</h1>
-
-<p>经验：
+<div class="entry-content"><p>经验：
 不要用usermod来为用户增加组。比较危险</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -210,6 +210,8 @@ sudo usermod -g group user #这是直接将user的组设置为group &hellip;">
         <a class="basic-alignment left" href="/blog/2015/04/09/osx-10-10-3-ssh-server-chinese-messy-code/" title="Previous Post: max升级10.10.3后的坑">&laquo; max升级10.10.3后的坑</a>
       
       
+        <a class="basic-alignment right" href="/blog/2016/02/19/react-0/" title="Next Post: 0.现代前端基础常识">0.现代前端基础常识 &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -223,19 +225,23 @@ sudo usermod -g group user #这是直接将user的组设置为group &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux/">How_to_rescue_sudo_privilege_on_linux</a>
+        <a href="/blog/2016/02/19/react-4/">4. 一个基础的React框架雏形</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/04/09/osx-10-10-3-ssh-server-chinese-messy-code/">max升级10.10.3后的坑</a>
+        <a href="/blog/2016/02/19/react-3/">3. React剩余的功能</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/03/08/golang-package-list/">Golang一些有趣的工具</a>
+        <a href="/blog/2016/02/19/react-2/">2. React组件动起来</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/02/16/golang-black-miagic-1-split-blank-string-or-not-matched-string-return-array-which-len-is-1-and-element-is-it-self/">Golang 黑魔法之一: 使用strings.Split()函数时，如果string不包含sep则返回[string]而不是[]</a>
+        <a href="/blog/2016/02/19/react-1/">1. React静态组件基础</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-0/">0.现代前端基础常识</a>
       </li>
     
   </ul>

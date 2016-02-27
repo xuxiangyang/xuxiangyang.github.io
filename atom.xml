@@ -4,7 +4,7 @@
   <title><![CDATA[徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2016-02-19T16:19:23+08:00</updated>
+  <updated>2016-02-28T00:52:37+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -14,13 +14,685 @@
 
   
   <entry>
-    <title type="html"><![CDATA[How_to_rescue_sudo_privilege_on_linux]]></title>
+    <title type="html"><![CDATA[4. 一个基础的React框架雏形]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-4/"/>
+    <updated>2016-02-19T16:26:14+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-4</id>
+    <content type="html"><![CDATA[<p>代码在  <a href="http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/basic_frame">react_start_kit</a>的basic_frame tag上</p>
+
+<p>大致文件结构组织如下。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>.
+</span><span class='line'>├── README.md
+</span><span class='line'>├── .git
+</span><span class='line'>├── .gitignore
+</span><span class='line'>├── deploy
+</span><span class='line'>├── m.sublime-project
+</span><span class='line'>├── package.json
+</span><span class='line'>├── src
+</span><span class='line'>│   ├── components
+</span><span class='line'>│   │   ├── Footer
+</span><span class='line'>│   │   │   ├── Footer.css
+</span><span class='line'>│   │   │   └── Footer.js
+</span><span class='line'>│   │   └── Slogan
+</span><span class='line'>│   │       ├── Slogan.css
+</span><span class='line'>│   │       └── Slogan.js
+</span><span class='line'>│   ├── config.js
+</span><span class='line'>│   ├── index.css
+</span><span class='line'>│   ├── index.html
+</span><span class='line'>│   ├── index.js
+</span><span class='line'>│   ├── pages
+</span><span class='line'>│   │   └── HelloWorldPage
+</span><span class='line'>│   │       ├── HelloWorldPage.css
+</span><span class='line'>│   │       └── HelloWorldPage.js
+</span><span class='line'>│   └── vendor
+</span><span class='line'>│       ├── favicon.ico
+</span><span class='line'>│       └── js
+</span><span class='line'>│           └── mtx.js
+</span><span class='line'>├── tools
+</span><span class='line'>│   ├── server.js
+</span><span class='line'>│   └── servers
+</span><span class='line'>│       └── server.js
+</span><span class='line'>├── webpack.config.js
+</span><span class='line'>└── .babelrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个基本原则是这样的
+不管是<code>page</code>还是<code>component</code>，本质上都是一个组件。一个组件是由这样一个文件夹组成的：（以Slogan为例）</p>
+
+<ol>
+<li>文件夹名字与组件相同。所以文件夹名为Slogan</li>
+<li>这个文件下有这个组件需要的所有东西，比如js、css，甚至是图片等。</li>
+<li>文件夹下有一个Slogan.js与Slogan.css。js文件负责组件的显示，资源的整合。css负责组件内的布局，它不用关心组件间该如何排列。</li>
+<li>css 的className推荐以组件名作为前缀，并且一个组件的顶级className最好和组件名相同。</li>
+</ol>
+
+
+<p>最基础的组件，放在components文件夹下。有几个要点</p>
+
+<ol>
+<li>显示的内容最好不要写死，要通过props传递。比如文字内容，最好写进props，然后在Page中初始化。这样能最大程度的重复利用</li>
+<li>组件要分的恰当，不要太大，也不要太小。基本原则是这样的：如果一个组件会在Page或其他Component中使用，那么就独立为一个文件夹。否则这是一个内部组件，放在相应组件即可。以Banner的显示为例</li>
+<li>暴露在外面的是Banner这个组件，一个Banner由多个BannerImage组成，Banner负责控制BannerImage的初始化、轮播</li>
+<li>BannerImage寄生在Banner组件中，放在对应的js和css中。</li>
+<li>如果以后有组件需要使用BannerImage，那么可以将它独立为一个文件夹，然后考虑换一个更通用的名字，例如ClickableImage等。</li>
+</ol>
+
+
+<p>抽象出来了一类特殊的组件，叫做page。建议名字以Page结尾。它也是一个组件，所以文件夹内的文件职责与上面的相同。但它也有一些特殊的地方。</p>
+
+<ol>
+<li>这个是顶层的组件，一个Page就相当于对应了一整个html</li>
+<li>它的css负责调整组件间的相互关系。推荐每个组件加一个class 命名为page，这可以在更高层的css中做处理用</li>
+</ol>
+
+
+<p>甚至可以在pages和components中抽象出一个layouts层，它也是一个组件，如果两个页面非常像，比如说成绩查询和成绩预约页面，所需要的组件都是相同的，只是小部分文案不同，可以独立出一个layout，然后page渲染layout，layout渲染component</p>
+
+<p>仔细解释下每个文件的作用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>.
+</span><span class='line'>├── deploy                                      //部署脚本，使用方法 ./deploy production
+</span><span class='line'>├── m.sublime-project                           //sublime环境，所以我们需要使用subl m.sublime-project。代替subl .这样可以处理jsx的高亮，它是project级别的自定义配置
+</span><span class='line'>├── package.json                                //版本控制
+</span><span class='line'>├── src                                         //项目的源码
+</span><span class='line'>│   ├── components                              //组件
+</span><span class='line'>│   │   ├── Footer
+</span><span class='line'>│   │   │   ├── Footer.css
+</span><span class='line'>│   │   │   └── Footer.js
+</span><span class='line'>│   │   └── Slogan
+</span><span class='line'>│   │       ├── Slogan.css
+</span><span class='line'>│   │       └── Slogan.js
+</span><span class='line'>│   ├── config.js                               //配置js，负责一些常量的配置。比如服务器地址，请求TIMEOUT时间
+</span><span class='line'>│   ├── index.css                               //入口css，负责处理一些全局的坑。可以看看index.css
+</span><span class='line'>│   ├── index.html                              //我们是单页应用，这个是我们的单页HTML
+</span><span class='line'>│   ├── index.js                                //入口js，负责把React绑到HTML上
+</span><span class='line'>│   ├── pages                                   //页面
+</span><span class='line'>│   │   └── HelloWorldPage
+</span><span class='line'>│   │       ├── HelloWorldPage.css
+</span><span class='line'>│   │       └── HelloWorldPage.js
+</span><span class='line'>│   └── vendor                                 //第三方依赖，其实和public很相似。主要用来存储一些下载下来的第三方js库
+</span><span class='line'>│       ├── favicon.ico
+</span><span class='line'>│       └── js
+</span><span class='line'>│           └── mtx.js
+</span><span class='line'>├── tools                                     //调试用的工具
+</span><span class='line'>│   ├── server.js
+</span><span class='line'>│   └── servers
+</span><span class='line'>│       └── server.js
+</span><span class='line'>├── webpack.config.js                         //webpakc的配置
+</span><span class='line'>└── .babelrc                                  //babel的配置</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[3. React剩余的功能]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-3/"/>
+    <updated>2016-02-19T16:25:03+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-3</id>
+    <content type="html"><![CDATA[<h2>Mixin。相当于ruby中的include，我们可以把一些公用的功能提取出来，放在Mixin中。</h2>
+
+<p>使用mixin，你就没办法使用ecma6中的写法了。只能用React.createClass
+例子：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var Mixin = {
+</span><span class='line'>  onInputChange: function(field, ref) {
+</span><span class='line'>    let newState = {};
+</span><span class='line'>    newState[field] = ref.target.value;
+</span><span class='line'>    this.setState(newState);
+</span><span class='line'>  }
+</span><span class='line'>};
+</span><span class='line'>
+</span><span class='line'>var ExampleForm = React.createClass({
+</span><span class='line'>  mixins: [Mixin],
+</span><span class='line'>  getInitialState: function() {
+</span><span class='line'>    return {username: "ss"}
+</span><span class='line'>  },
+</span><span class='line'>  render: function() {
+</span><span class='line'>    return &lt;form action="/test"&gt;
+</span><span class='line'>      &lt;label for="username"&gt;用户名&lt;/label&gt;
+</span><span class='line'>      &lt;input className="form-control" name="username" value={this.state.username} ref="username" name="username" onChange={this.onInputChange.bind(this, "username")}/&gt;
+</span><span class='line'>    &lt;/form&gt;
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样，我们就把通用的功能提取到了一个公用的代码块</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2. React组件动起来]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-2/"/>
+    <updated>2016-02-19T16:24:27+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-2</id>
+    <content type="html"><![CDATA[<p>所谓动起来，其实就是state。通过需要state可以让页面DOM改变。
+state是什么呢？所谓状态，其实一般就是受用户行为影响的、或者会随着时间改变的东西。
+它和props的区别如下：</p>
+
+<ol>
+<li>props是父级传递下来的，在子级内不可以改变。state是子级内部的，是可以改变的。</li>
+<li>props是静态的，它一般用来构成html的“骨架”。父级可以将自己的state当作props传递给子级， 对子级而言，得到的props是静态的。</li>
+</ol>
+
+
+<p>举个例子，form提交。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, { Component } from "react"
+</span><span class='line'>class ExampleForm extends Component {
+</span><span class='line'>  constructor(props) {
+</span><span class='line'>    super(props);
+</span><span class='line'>    this.state = {username: "defaultUserName"};
+</span><span class='line'>  }
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>        &lt;form action="/test"&gt;
+</span><span class='line'>            &lt;input value={this.state.username}/&gt;
+</span><span class='line'>        &lt;/form&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果如
+[Image: file:///-/blob/JIHAAAqTc9C/6K58Jv6gf78ZNVLQOuNbTg]但你会发现这个input不能输入，不能删除。这个原因是<strong>React的数据是单向绑定的</strong>。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
+下面会用ref来选取到input，它的作用和css选择器相当。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, { Component } from "react"
+</span><span class='line'>class ExampleForm extends Component {
+</span><span class='line'>  constructor(props) {
+</span><span class='line'>    super(props);
+</span><span class='line'>    this.state = {username: "defaultUserName"};
+</span><span class='line'>    this.onNameChange = this.onNameChange.bind(this); //这句话很重要，它是让onNameChange函数中，也能访问到this。
+</span><span class='line'>  }
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>        &lt;form action="/test"&gt;
+</span><span class='line'>            &lt;input value={this.state.username} onChange={this.onNameChange} ref="username" name="username"/&gt;
+</span><span class='line'>        &lt;/form&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>  onNameChange() {
+</span><span class='line'>    this.setState({username: this.refs.username.value});
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里面有几个知识点：</p>
+
+<ol>
+<li>this需要bind才能够访问到，js是把函数当作作用域的。</li>
+<li>改变state，不能通过<code>this.state.username=”ss”</code>来改变需要通过<code>setState</code>改变。同样地props也不能通过<code>this.props.somePorps = “value”</code>来改变，要使用<code>setProps</code>来改变</li>
+<li>ref，相当于css选择器，用来定位到一个html元素</li>
+<li>setState只会修改传进去的hash中有的key，假设一个state是<code>{a: 1, b: 2}</code>，我们通过<code>this.setState({b: 3})</code>，这时，state是<code>{a: 1, b: 3</code>}。</li>
+</ol>
+
+
+<p>让这个写法更通用点</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class ExampleForm extends Component {
+</span><span class='line'>  constructor(props) {
+</span><span class='line'>    super(props);
+</span><span class='line'>    this.state = {username: "defaultUserName"};
+</span><span class='line'>  }
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>        &lt;form action="/test"&gt;
+</span><span class='line'>            &lt;input value={this.state.username} onChange={this.onInputChange.bind(this, "username")} ref="username" name="username"/&gt;
+</span><span class='line'>        &lt;/form&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>  onInputChange(field, ref) {
+</span><span class='line'>    let newState = {};
+</span><span class='line'>    newState[field] = ref.target.value;
+</span><span class='line'>    this.setState(newState);
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>ReactDOM.render(
+</span><span class='line'>  &lt;ExampleForm/&gt;,
+</span><span class='line'>  document.getElementById("root")
+</span><span class='line'>);</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1. React静态组件基础]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-1/"/>
+    <updated>2016-02-19T16:23:13+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-1</id>
+    <content type="html"><![CDATA[<p>React中最基础的概念就是组件。这篇讲的都是静态组件。也就是写死各种参数。没有变化。所以暂时忽略state</p>
+
+<p>一个组件有一个props，这里面存储了由父元素传递来的属性。整个页面由一颗树组成。</p>
+
+<p>一个最基础的组件定义如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, { Component } from "react"
+</span><span class='line'>class ExampleComponent extends Component {
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>        &lt;div&gt;
+</span><span class='line'>          这是一个组件的基础形式，有几点需要注意：
+</span><span class='line'>          1. 组件继承自React中的Component
+</span><span class='line'>          2. 组件显示的函数叫render，显示的html元素放在render里
+</span><span class='line'>          3. html比如包在return()中
+</span><span class='line'>          4. html元素只能有一个唯一的父元素
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个组件的声明周期由以下几个组成。在第一次绘制的时候如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>getDefaultProps
+</span><span class='line'>getInitialState
+</span><span class='line'>componentWillMount
+</span><span class='line'>render
+</span><span class='line'>componentDidMount</span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要注意的是一般<code>getDefaultProps</code>和<code>getInitialState</code>都是用来初始化props和state的。不要用来做其他的事情。另外，我们一般使用ECMAScript6，所起其实不会有这两个函数~
+一般写法如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, { Component } from "react"
+</span><span class='line'>class ExampleComponent extends Component {
+</span><span class='line'>  constructor(props) {
+</span><span class='line'>    super(props);
+</span><span class='line'>    this.state = {count: props.initialCount}; //一般在constructor指定默认state
+</span><span class='line'>    this._my_func = this._my_func.bind(this) //这里面一般还会把this传递给自定义的函数，不然函数中访问不到this
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  componentWillMount() {
+</span><span class='line'>    //render前执行
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  componentDidMount() {
+</span><span class='line'>    //render后执行
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>      &lt;div&gt;
+</span><span class='line'>       &lt;a onClick={this._my_func}&gt;
+</span><span class='line'>        hello
+</span><span class='line'>       &lt;/a&gt;
+</span><span class='line'>      &lt;/div&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  _my_func() { //前面的下划线可以不加
+</span><span class='line'>    this.props //这样就可以访问了
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>ExampleComponent.propTypes = { count: React.PropTypes.number } //用来约束props的类型，js是弱类型的，所以porps最好约束下
+</span><span class='line'>Counter.defaultProps = { count: 0 }; //作用相当于`getDefaultProps`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在之后的更新会有这样的流程</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>componentWillReceivePorps
+</span><span class='line'>shouldComponentUpdate
+</span><span class='line'>componentWillUpdate
+</span><span class='line'>render
+</span><span class='line'>componentDidUpdate</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个组件再消失前会调用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>componentWillUnmount</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一般用来清理。上面的<code>componentWillReceivePorps</code>、<code>shouldComponentUpdate</code>、<code>componentWillUpdate</code>、<code>componentDidUpdate</code>、<code>componentWillUnmount</code> 用法都和 <code>componentWillMount</code> 类似</p>
+
+<p>所以看一些例子一般组件的用法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, { Component } from "react"
+</span><span class='line'>import ReactDOM from 'react-dom';
+</span><span class='line'>class Parent extends Component {
+</span><span class='line'>    render() {
+</span><span class='line'>      return(
+</span><span class='line'>        &lt;Child name="child"/&gt;
+</span><span class='line'>      )
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>class Child extends Component {
+</span><span class='line'>  render() {
+</span><span class='line'>    return(
+</span><span class='line'>      &lt;div&gt;
+</span><span class='line'>      {this.props.name} //大括号内的代码是可以执行的
+</span><span class='line'>      &lt;/div&gt;
+</span><span class='line'>    )
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>Child.propTypes = { name: React.PropTypes.string }
+</span><span class='line'>
+</span><span class='line'>ReactDOM.render(
+</span><span class='line'>    &lt;Parent/&gt;,
+</span><span class='line'>    document.getElementById("root")
+</span><span class='line'>);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这些例子都可以在 <strong><a href="http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/hello_world">react_start_kit_simple</a> 中尝试。使用hello_world这个tag下的代码</strong></p>
+
+<p>有一些原则，不要修改this.props。永远使用父组件传递下来的props会让你的组件更加简单稳定。组件最好的状态就是一个“死”组件。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[0.现代前端基础常识]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-0/"/>
+    <updated>2016-02-19T16:21:28+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/19/react-0</id>
+    <content type="html"><![CDATA[<h2>npm: 相当于ruby中的bundle，利用package.json管理</h2>
+
+<p>但它的功能更强大，除了包含作者等等基本信息，还用<code>scripts</code>定义了可以执行的脚本。<code>dependencies</code>是你的依赖，就像gem的依赖。<code>devDependencies</code>是你开发时用的工具，里面的东西和ruby中类似于pry等gem相当。几个常用的命令：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm init //初始化，一个交互式的脚本
+</span><span class='line'>npm install //根据package.json下载依赖，但一般只有第一次会用
+</span><span class='line'>npm install xx --save //下载xx，并且将xx加入 `dependencies 中。常用
+</span><span class='line'>`npm install xx --save-dev //下载xx，并且将xx加入 `devDependencies`` 中。常用`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>npm负责你程序的脚本，依赖、下载。所以看一个前端，第一个应该看它的package.json</p>
+
+<h2>webpack: 打包工具</h2>
+
+<p>它可以将我们各种js、css、图片。利用各种loader加载好。这样，我们需要任何一个资源（不管是js、css、图片）都可以使用require来加载了。
+它依赖于webpack.config.js。里面会定义各种各样的loader和plugin。之所以可以require各种资源，是因为给他们定义了对应的loader。
+它有一个<code>webpack-dev-server</code>可以用来做开发是起web服务</p>
+
+<h2>babel:  用来转义js，jsx、ecma6、ecma7都由它转义</h2>
+
+<p>js出了各种写法，比如jsx、ecma6、ecma7等等。但很多浏览器不支持这种写法，所以需要babel来进行转义，转义成浏览器支持的形式。babel分成了好多个项目。要注意分清楚。</p>
+
+<h2>JSX: 就是js、html混用，写法类似下面的</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>React.render(
+</span><span class='line'>&lt;h1 className="class"&gt;
+</span><span class='line'>{ture ? "true" : "false"} //大括号内是可以执行的js代码
+</span><span class='line'>&lt;/h1&gt;,
+</span><span class='line'>document.getElementById('example')
+</span><span class='line'>);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但jsx本身是不被浏览器支持的。他需要babel进行转义。
+他有一些不同</p>
+
+<ol>
+<li><code>class</code>属性变为了<code>className</code>，因为<code>class</code>与js语法冲突</li>
+<li>如果往原生HTML中加入HTML规范中不存在的属性，需要使用<code>data-</code>前缀</li>
+</ol>
+
+
+<p>这个东西可以用sublime package Babel高亮。每个项目下有一个m.sublime-project。以后的输入用<code>subl m.sublime-project</code>代替<code>subl .</code> 会更合理。直接使用这个项目的特定sublime配置</p>
+
+<h2>ECMA6/ECMA7: 这是js的新规范。里面定义了一些新的语法。同样目前不能被所有浏览器直接执行。需要用babel进行转义。</h2>
+
+<h2>数据绑定</h2>
+
+<p>现在很多库推崇的都是不要直接操作DOM，而是操作虚拟DOM，然后由库来决定真实DOM要不要重新渲染。常见形式有单向绑定和双向绑定。</p>
+
+<ul>
+<li>单向绑定: 可以<strong>通过改变数据改变DOM，不可以通过改变DOM改变数据</strong>。react就是这种方式。整体感觉就是如果想改变DOM，那么就去改变数据。如果数据不变，DOM其实是也不能改变的。这种方式效率高，模型简单。我们只需要考虑数据的改变就好了，但实际使用中form的input会有个小坑（form中的input一般都绑定在一个数据上，如果输入，其实是改变了DOM，数据并没有改变。所以表现出来的现象是不能输入和删除）。</li>
+<li>双向绑定：<strong>通过改变数据改变DOM，也可以通过改变DOM改变数据。</strong>angular采用这种方式。这种方式其实写小应用挺好用，数据和DOM相当于是同一个东西，不会存在单向绑定中form的input的那种问题。但是效率低，并且如果应用复杂后，其实是引入了很多不确定性。</li>
+</ul>
+
+
+<h2>依赖注入</h2>
+
+<p>angular中着重讲的概念。其实就是函数式编程。在js中函数也是对象，函数可以和其他对象一样可以当参数传递。所以会见到很多这种写法</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function test(aFunc, params) {
+</span><span class='line'>aFunc(1) // 调用函数
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用的时候就是把声明好的函数传进去。在angular中，一般用这种方式把http、route等函数传进去。同样react也会用这种方式，传递一些函数。比如flux/redux中的dispatch、getState等</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一次运维失误，误删deployer Sudo权限]]></title>
     <link href="http://xuxiangyang.github.io/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux/"/>
     <updated>2016-02-19T16:09:09+08:00</updated>
     <id>http://xuxiangyang.github.io/blog/2016/02/19/how-to-rescue-sudo-privilege-on-linux</id>
-    <content type="html"><![CDATA[<h1>一次运维失误，误删deployer sudo权限</h1>
-
-<p>经验：
+    <content type="html"><![CDATA[<p>经验：
 不要用usermod来为用户增加组。比较危险</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
