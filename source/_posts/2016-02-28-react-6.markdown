@@ -1,0 +1,122 @@
+---
+layout: post
+title: "6. Redux中的Store和reducer"
+date: 2016-02-28 01:02:45 +0800
+comments: true
+categories: React
+---
+
+Store是唯一的，它整合了reducer。保存了全局唯一个state树
+它有如下职责：
+
+1. 维持应用的state
+2. 提供`getState()`函数获取state
+3. 提供`dispatch(action)`函数来改变state
+4. 通过`subscribe(listener)`注册监听器
+
+可以通过`createStore()`根据已有的reducers来创建一个store。reducer是根据action和当前的state返回新的state的纯函数。当逻辑很复杂时，我们不是去创建多个store，每个store存储对应的state。而是拆分reducers。数据只有一份，但是会有各种各样的处理方式。
+创建一个store的代码如下：
+
+```
+import { createStore } from 'redux'
+import App from './reducers' //reducers集合
+const store = createStore(App)
+```
+
+`subscribe()`函数是用来监听state改变的。如果注册了监听器。那么每次state改变都会调用监听器。
+
+参考代码 http://github.com/xuxiangyang/react_start_kit_simple/commits/redux
+
+你会在`src/index.js`里面看到类似的代码。但是有些不同里面的代码是这样的
+
+```
+const store = compose(
+  applyMiddleware(thunk),
+  reduxReactRouter({ createHistory: createBrowserHistory })
+)(createStore)(App);
+```
+
+这个是加了路由。我们的路由用的是redux-router。它是对于react-router的一层封装。它将路由状态放在store中。
+
+我们再看看reducers的大概实现
+
+```
+import { combineReducers } from 'redux';
+import { routerStateReducer } from 'redux-router';
+
+import count from "./count"
+
+const App = combineReducers({
+  count: count,
+  router: routerStateReducer
+});
+
+export default App;
+```
+
+这个在`src/reducers/index.js`中。主要是把各个reduer(比如count)组合起来。看这部分：
+
+```
+const App = combineReducers({
+  count: count,
+  router: routerStateReducer
+});
+```
+
+其中的hash，就对应了之后的state树结构。上面的state树会长成这样
+
+```
+{
+  count: xx,
+  router: xx,
+}
+```
+
+然后我们深入到每个reducer去看下。这里只有一个reduer，叫做count。它在`src/reducer/count.js`中
+
+```
+export default function(state = 1, action) {
+  switch(action.type) {
+    case "INCREASE":
+      return state + 1
+    default:
+      return state;
+  }
+}
+```
+
+这里我们可以看到一个reducer就是一个纯函数。它由一个switch/case子句组成。我们前面讲过，一个好的action是这样设计的。
+
+```
+{
+  type: "action的类型"
+  payload: "action搭载的shu ju"
+}
+```
+
+我们可以看到，reducer就是根据action的类型。然后在根据老的state产生一个新的state。
+
+至此，state已经可以自己更新了。但是更新后的state怎么影响view呢？这就用到了`connect()`函数。
+
+connect主要职责是把store中的state树转化为props、提供`dispatch`、`getState`方法。理论上任意一个组件都可以connect到store。但不推荐这么使用，因为这样会让数据流难以掌控。所以connect的组件级别越高越好。然后里面的组件都是死的。通过props依次传递下去。建议connect的组件停留在layout或者page层。
+
+以`src/pages/HelloworldPage.js`为例
+
+```
+import React, {Component} from "react";
+import { connect } from 'react-redux';
+
+function mapStateToProps(state) {
+  return {
+    count: state.count
+  };
+}
+
+class HelloWorldPage extends Component {
+  //组件内容
+}
+
+export default connect(mapStateToProps)(HelloWorldPage);
+```
+
+`mapStateToProps` 这个函数主要做了一件事，把state树上的数据去下来绑定到props上。这样`this.props.count`就可以访问了。

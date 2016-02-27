@@ -6,7 +6,7 @@ comments: true
 categories:
 ---
 
-代码在  [react_start_kit](http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/basic_frame)的basic_frame tag上
+代码在  [react_start_kit](http://github.com/xuxiangyang/react_start_kit_simple/commits/basic_frame)的basic_frame tag上
 
 大致文件结构组织如下。
 

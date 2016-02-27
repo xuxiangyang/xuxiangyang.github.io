@@ -1,0 +1,64 @@
+---
+layout: post
+title: "5. Redux基础知识"
+date: 2016-02-28 00:53:58 +0800
+comments: true
+categories: React
+---
+
+Redux不像MVC，给人的感觉更像消息系统。整个的感觉是这样的：
+
+整个应用有一个State，这个State表明了所有的状态，并且只有一个Store存储这个。其余的操作都是action。通过action_creator创建出来一个action，然后dispatch（分发）这个action。然后所有的reducer根据action的type来决定要不要处理这个action。如果要处理，就返回一个新的State。然后Store会根据这个新的State更新State树。然后重新渲染页面。
+
+整个过程看起来是这样的：
+{% img /images/posts/20160828/2.png %}
+上面说了一些名词，下面说说他们的意思。
+
+* State：状态。就是那些可以变的东西。比如说用户的行为、随着时间变化的等。与React中的状态一致。它是一个简单的Object
+* Action：行为。用来描述已经发生的事件。意思上更接近做了xx事。也是一个简单的Object。推荐这样设计这个Action
+    * {
+          type: "SUBMIT_FORM", //表明action的类型。reducer用来它决定要不要响应这个action
+          payload: { //Action搭载的数据
+            username: "test",
+            password: "password"
+          }
+        }
+* Dispatch：分发。它其实是一个函数，dispatch是store的一个函数。用来分发action
+* Reducer:  处理器。它是将根据Action中的type来决定是否响应，如果响应，会根据当前的State和Action中搭载的数据。产生一个新的State。一个reducer对应这State树中一个分支。所以当前State和新的State都指的是reducer对应的那部分State
+* Store: 存储。全局只会有一个Store。存储了State树，并且提供了dispatch、getState等方法
+
+Redux有三个原则：
+
+1. 单一数据源：整个应用的state被存储到一颗object tree中。并且这个object tree 存在于唯一一个store中
+2. State是只读的：唯一能够改变State的做法就是触发Action。
+3. 用纯函数来执行修改：Reducer用来描述action如何修改State树。
+
+纯函数的意思是这样的：
+
+1. 里面没有网络请求，不更新数据。就是没有任何对外的影响。
+2. 不改变输入值
+
+大致Redux总的想法就是一套消息系统，然后配合上状态机的使用。核心的事情有以下这些：
+
+1. 应用有哪些状态
+2. 如何在状态间切换
+
+对于状态间的切换，它用的方式是消息。也就是Action。我们的View只需要这两个职责
+
+1. 根据状态决定如何显示
+2. 通知Redux发生了xx事
+
+这是一个非常非常好的设计。干净，清晰。随着我们的应用复杂度提升，Redux的开发复杂度也能实现线性增长。而不是像MVC，会成n^2甚至指数增长。
+
+Redux项目地址：https://github.com/rackt/redux 非官方Flux实现方案，Star数超过11K，非常厉害。
+
+另外，可以去看看Facebook官方的Flux，思想很接近。不要来说服我用官方Flux。。。
+不用Flux原因有以下几个：
+
+1. 最重要的，David用了Redux。Flux和Redux是两套东西。后续我们的路由等等也会用Redux来做。选择了Flux意味着所有东西都要自己去尝试。没有大神腿可以抱
+2. 官方的Flux点赞数没有Redux高
+3. Redux更清晰，更干净。Flux也在越来越像Redux
+4. 鉴于我们的前端水平如此之弱，选择哪个其实都是一样的。我觉得我们是没有能力判断到底哪个好的。所以根据1、2两条原因。我们会只用Redux
+
+推荐个中文资料
+https://camsong.github.io/redux-in-chinese/index.html

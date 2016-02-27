@@ -33,7 +33,8 @@ class ExampleForm extends Component {
 ```
 
 效果如
-[Image: file:///-/blob/JIHAAAqTc9C/6K58Jv6gf78ZNVLQOuNbTg]但你会发现这个input不能输入，不能删除。这个原因是**React的数据是单向绑定的**。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
+{% img /images/posts/20160828/1.png %}
+但你会发现这个input不能输入，不能删除。这个原因是**React的数据是单向绑定的**。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
 下面会用ref来选取到input，它的作用和css选择器相当。
 
 ```

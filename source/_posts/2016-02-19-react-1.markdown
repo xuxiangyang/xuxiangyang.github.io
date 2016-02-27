@@ -126,6 +126,6 @@ ReactDOM.render(
 );
 ```
 
-这些例子都可以在 **[react_start_kit_simple](http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/hello_world) 中尝试。使用hello_world这个tag下的代码**
+这些例子都可以在 **[react_start_kit_simple](http://github.com/xuxiangyang/react_start_kit_simple/commits/hello_world) 中尝试。使用hello_world这个tag下的代码**
 
 有一些原则，不要修改this.props。永远使用父组件传递下来的props会让你的组件更加简单稳定。组件最好的状态就是一个“死”组件。
