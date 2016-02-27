@@ -138,7 +138,8 @@ state是什么呢？所谓状态，其实一般就是受用户行为影响的、
 
 
 <p>效果如
-[Image: file:///-/blob/JIHAAAqTc9C/6K58Jv6gf78ZNVLQOuNbTg]但你会发现这个input不能输入，不能删除。这个原因是<strong>React的数据是单向绑定的</strong>。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
+<img src="/images/posts/20160828/1.png">
+但你会发现这个input不能输入，不能删除。这个原因是<strong>React的数据是单向绑定的</strong>。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
 下面会用ref来选取到input，它的作用和css选择器相当。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -292,23 +293,23 @@ state是什么呢？所谓状态，其实一般就是受用户行为影响的、
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/02/28/hole-of-react/">React经验</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-7/">7. Redux中的Action</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-6/">6. Redux中的Store和reducer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-5/">5. Redux基础知识</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/02/19/react-4/">4. 一个基础的React框架雏形</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/02/19/react-3/">3. React剩余的功能</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/02/19/react-2/">2. React组件动起来</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/02/19/react-1/">1. React静态组件基础</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/02/19/react-0/">0.现代前端基础常识</a>
       </li>
     
   </ul>

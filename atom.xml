@@ -4,7 +4,7 @@
   <title><![CDATA[徐向阳]]></title>
   <link href="http://xuxiangyang.github.io/atom.xml" rel="self"/>
   <link href="http://xuxiangyang.github.io/"/>
-  <updated>2016-02-28T00:52:37+08:00</updated>
+  <updated>2016-02-28T01:24:59+08:00</updated>
   <id>http://xuxiangyang.github.io/</id>
   <author>
     <name><![CDATA[徐向阳]]></name>
@@ -14,11 +14,578 @@
 
   
   <entry>
+    <title type="html"><![CDATA[React经验]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/28/hole-of-react/"/>
+    <updated>2016-02-28T01:16:58+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/28/hole-of-react</id>
+    <content type="html"><![CDATA[<h2>Promise 低版本不支持。安卓4.4不支持 Promise语法。需要安装<code>babel-polyfill</code> 然后require</h2>
+
+<h2>Nginx 未转发 router里的请求</h2>
+
+<p>nginx 需要特殊设定，才能转发所有router。总体思路就是把所有请求都交给index.html处理</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server {
+</span><span class='line'>        listen 80;
+</span><span class='line'>        server_name cet.kechenggezi.com;
+</span><span class='line'>        access_log  logs/cet_web.kechenggezi.com.access.log;
+</span><span class='line'>        root /var/www/cet_web/production/current;
+</span><span class='line'>        location / {
+</span><span class='line'>                try_files $uri /index.html =404;
+</span><span class='line'>                expires    -5y;
+</span><span class='line'>                add_header Pragma no-cache;
+</span><span class='line'>                add_header Cache-Control "no-cache, no-store, must-revalidate";
+</span><span class='line'>        }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>index.html（html入口）浏览器中开缓存，导致更新失效。</h2>
+
+<p>一般来说修改nginx就ok了，在nginx中加入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>expires    -5y;
+</span><span class='line'>add_header Pragma no-cache;
+</span><span class='line'>add_header Cache-Control "no-cache, no-store, must-revalidate";</span></code></pre></td></tr></table></div></figure>
+
+
+<p>也可以在html header中加入如下meta</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /&gt;
+</span><span class='line'>&lt;meta http-equiv="Pragma" content="no-cache" /&gt;
+</span><span class='line'>&lt;meta http-equiv="Expires" content="0" /&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>关闭缓存</p>
+
+<h2>服务端cors，请求跨域</h2>
+
+<p>需要服务端处理。如果是rails，推荐使用下面的gem</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'rack-cors', "~&gt; 0.4.0", :require =&gt; 'rack/cors'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在不同的environment中进行自己的配置。如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  config.middleware.insert_before 0, "Rack::Cors" do
+</span><span class='line'>    allow do
+</span><span class='line'>      origins 'cet.kechenggezi.com', "web.cet.kechenggezi.com"
+</span><span class='line'>      resource '*',
+</span><span class='line'>        :headers =&gt; :any,
+</span><span class='line'>        :methods =&gt; [:get, :post, :options, :delete, :put],
+</span><span class='line'>        :max_age =&gt; 1728000
+</span><span class='line'>    end
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>不推荐允许origins 为 *</p>
+
+<h2>不要用jquery-mobile</h2>
+
+<p>这个库特别慢。加载了它打开页面需要好久。如果需要手机上的手势可以使用<code>hammerjs</code>库实现。</p>
+
+<h2>好的JS库</h2>
+
+<ol>
+<li>immutable： js的hash、array等数据结构实现。它的每一个操作都是返回一个新的对象。适合用来表示state</li>
+<li>isomorphic-fetch: fetch的模拟实现。fetch是ecma6才有的。绝大多数浏览器并不支持。这个库实现了fetch，可以让老版本浏览器支持</li>
+<li>redux-router/react-router: 路由。将路由与redux状态同步</li>
+<li>babel-polyfill：ecma6仿真。依旧是让老版本可以支持</li>
+<li>react-addons-css-transition-group: react页面间动画。可以用它来模拟ios右滑动画效果。配合react-static-container使用</li>
+<li>hammerjs：手机手势仿真</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[7. Redux中的Action]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/28/react-7/"/>
+    <updated>2016-02-28T01:04:02+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/28/react-7</id>
+    <content type="html"><![CDATA[<h2>什么是Action</h2>
+
+<p>Action描述的是一个动作。大致形式如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  type: 动作类型,
+</span><span class='line'>  payload: 数据
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个type标识动作是什么，reducer根据这个type决定要不要处理。payload是携带的数据。比如说我们描述提交了一个Form，那么这个type就是“提交Form”，而payload就是Form中用户填写的数据。</p>
+
+<p>action的实现中分两类。一类是同步Action，一类是异步Action。</p>
+
+<ul>
+<li>同步Action：没有网络请求。动作发生了马上就结束，不存在这个动作正在进行中这个过程。</li>
+<li>异步Action：一般为网络请求。一个动作发生了，会分为动作发生了、动作进行中、动作结束这三个过程。</li>
+</ul>
+
+
+<h2>同步Action</h2>
+
+<p>同步Action比较基础，dispatch action, reducer直接返回新的state，更新UI。</p>
+
+<p>举个例子，<a href="http://github.com/xuxiangyang/react_start_kit_simple">react_start_kit</a> 项目，我们点击Increase number，调用action creator的increase函数生成一个action，然后dispatch action，这时候reducer接收到action，执行state+1，返回新的state，更新UI，这就是一个同步action。</p>
+
+<p>在view中，我们通过调用disptatch分发这个action。在<code>src/pages/HelloWorldPage.js</code>里可以找到类似的话</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>increaseCount() {
+</span><span class='line'>    this.props.dispatch(increase())
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面调用了increase()函数。这是一个action的creator。在<code>src/action_creators/count.js.</code>”中我们定义了自己的action。同步的Action只返回一个新的对象。因为我们只是让它增1，所以没有设置payload。你可以尝试这加一个payload，实现增加任意的数字。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function increase() {
+</span><span class='line'>    return {
+</span><span class='line'>        type: "INCREASE"
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>reducer</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function(state = 1, action) {
+</span><span class='line'>    switch(action.type) {
+</span><span class='line'>        case "INCREASE":
+</span><span class='line'>            return state + 1
+</span><span class='line'>        default:
+</span><span class='line'>            return state;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果我们要开发一个异步的引用，应该怎么处理呢？</p>
+
+<p>举个例子，异步网络请求，首先有发起请求的时刻，还有请求成功或者请求失败的时刻。这些时刻，我们可能需要更新应用的状态，也就是state，比如显示加载中，加载完成，加载失败。既然要更新state，就需要dispatch action，reducer返回新的state。所以我们需要为发起请求，请求成功，请求失败定义action。</p>
+
+<p>我们可以把这些action统一为一个action，内部用status区分，不过redux建议定义为不同的action，比如POSTS_REQUEST，POSTS_FAILURE，POSTS_SUCCESS。</p>
+
+<p>写到这里，你可能会问，异步在哪呢，定义的这些Action和上面的Increase number的Action还是一样啊。确实一样，这些都是同步Action。</p>
+
+<h2>异步Action</h2>
+
+<p>接下来要说的异步Action就会把上面的同步Action和网络请求结合起来。</p>
+
+<p>上面我们写的action creator的函数都是返回一个action对象，不能完成异步网络请求，接下来我们引入 Redux Thunk middleware，用来扩展action creator的功能。</p>
+
+<p>解释一下middleware，node服务端框架常用，就是嵌入在框架接收请求到产生响应过程之中的代码。简单说middleware就是帮我们完成某些工作，并且可以链式组合多个独立的middleware。</p>
+
+<p>Redux middleware类似，它提供的是位于action被发起之后，到达reducer之前的扩展。</p>
+
+<p>引入Redux Thunk middleware之后，action creator不仅可以返回action对象，还可以返回函数，当action creator返回函数时，这个函数会被Redux Thunk middleware执行。</p>
+
+<p>既然返回的是函数，我们就可以在函数里面做需要的工作，比如异步网络请求，并且我们可以在这个函数里面dispatch其他的action，既可以是上面的同步的action，也可以是其他异步的action，是不是快连起来了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import fetch from 'isomorphic-fetch'
+</span><span class='line'>
+</span><span class='line'>export function requestPosts() {
+</span><span class='line'>  return {
+</span><span class='line'>    type: "REQUEST_POSTS"
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export function receivePosts(posts) {
+</span><span class='line'>  return {
+</span><span class='line'>    type: "RECEIVE_POSTS",
+</span><span class='line'>    payload: {
+</span><span class='line'>      posts: posts
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export function errorPosts() {
+</span><span class='line'>  return {
+</span><span class='line'>    type: "POSTS_FAILURE"
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export function fetchPosts() {
+</span><span class='line'>    return function (dispatch) {
+</span><span class='line'>        dispatch(requestPosts());
+</span><span class='line'>        return fetch("http://www.reddit.com/r/reactjs.json", {
+</span><span class='line'>          method: "get"
+</span><span class='line'>        }).then(function (response) {
+</span><span class='line'>            return response.json();
+</span><span class='line'>        }).then(function (json) {
+</span><span class='line'>            var posts = json.data.children.map(child =&gt; child.data)
+</span><span class='line'>            return dispatch(receivePosts(posts));
+</span><span class='line'>        }).catch(function (error) {
+</span><span class='line'>            return dispatch(errorPosts());
+</span><span class='line'>        });
+</span><span class='line'>    };
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们在返回的函数里面执行了fetch异步网络请求，请求之前，先dispatch一个REQUEST_POSTS的action，请求完成的时候，dispatch一个RECEIVE_POSTS的action，请求失败的时候，dispatch一个POSTS_FAILURE的action，reducer会分别处理这些action，返回相应的新的status，更新UI。</p>
+
+<p>解释一下fetch，它是替代 XMLHttpRequest 用来发送网络请求的非常新的 API。由于目前大多数浏览器原生还不支持它，建议你使用 isomorphic-fetch 库。它和jquery的async相比，异步任务采用promise链式调用，减少嵌套，代码清晰。</p>
+
+<p><strong>如何引入 Redux Thunk middleware</strong></p>
+
+<p>上面我们提到了引入Redux Thunk middleware来看扩展action creator的功能，那么如何引入呢？</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const store = compose(
+</span><span class='line'>    applyMiddleware(thunk),
+</span><span class='line'>    reduxReactRouter({ createHistory: createBrowserHistory })
+</span><span class='line'>)(createStore)(App);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>index.js文件里，我们创建store时，用了applyMiddleware(thunk)，就是引入了Thunk，然后就可以在action creator返回函数了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[6. Redux中的Store和reducer]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/28/react-6/"/>
+    <updated>2016-02-28T01:02:45+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/28/react-6</id>
+    <content type="html"><![CDATA[<p>Store是唯一的，它整合了reducer。保存了全局唯一个state树
+它有如下职责：</p>
+
+<ol>
+<li>维持应用的state</li>
+<li>提供<code>getState()</code>函数获取state</li>
+<li>提供<code>dispatch(action)</code>函数来改变state</li>
+<li>通过<code>subscribe(listener)</code>注册监听器</li>
+</ol>
+
+
+<p>可以通过<code>createStore()</code>根据已有的reducers来创建一个store。reducer是根据action和当前的state返回新的state的纯函数。当逻辑很复杂时，我们不是去创建多个store，每个store存储对应的state。而是拆分reducers。数据只有一份，但是会有各种各样的处理方式。
+创建一个store的代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import { createStore } from 'redux'
+</span><span class='line'>import App from './reducers' //reducers集合
+</span><span class='line'>const store = createStore(App)</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>subscribe()</code>函数是用来监听state改变的。如果注册了监听器。那么每次state改变都会调用监听器。</p>
+
+<p>参考代码 <a href="http://github.com/xuxiangyang/react_start_kit_simple/commits/redux">http://github.com/xuxiangyang/react_start_kit_simple/commits/redux</a></p>
+
+<p>你会在<code>src/index.js</code>里面看到类似的代码。但是有些不同里面的代码是这样的</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const store = compose(
+</span><span class='line'>  applyMiddleware(thunk),
+</span><span class='line'>  reduxReactRouter({ createHistory: createBrowserHistory })
+</span><span class='line'>)(createStore)(App);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个是加了路由。我们的路由用的是redux-router。它是对于react-router的一层封装。它将路由状态放在store中。</p>
+
+<p>我们再看看reducers的大概实现</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import { combineReducers } from 'redux';
+</span><span class='line'>import { routerStateReducer } from 'redux-router';
+</span><span class='line'>
+</span><span class='line'>import count from "./count"
+</span><span class='line'>
+</span><span class='line'>const App = combineReducers({
+</span><span class='line'>  count: count,
+</span><span class='line'>  router: routerStateReducer
+</span><span class='line'>});
+</span><span class='line'>
+</span><span class='line'>export default App;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个在<code>src/reducers/index.js</code>中。主要是把各个reduer(比如count)组合起来。看这部分：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const App = combineReducers({
+</span><span class='line'>  count: count,
+</span><span class='line'>  router: routerStateReducer
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中的hash，就对应了之后的state树结构。上面的state树会长成这样</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  count: xx,
+</span><span class='line'>  router: xx,
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后我们深入到每个reducer去看下。这里只有一个reduer，叫做count。它在<code>src/reducer/count.js</code>中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export default function(state = 1, action) {
+</span><span class='line'>  switch(action.type) {
+</span><span class='line'>    case "INCREASE":
+</span><span class='line'>      return state + 1
+</span><span class='line'>    default:
+</span><span class='line'>      return state;
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里我们可以看到一个reducer就是一个纯函数。它由一个switch/case子句组成。我们前面讲过，一个好的action是这样设计的。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  type: "action的类型"
+</span><span class='line'>  payload: "action搭载的shu ju"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以看到，reducer就是根据action的类型。然后在根据老的state产生一个新的state。</p>
+
+<p>至此，state已经可以自己更新了。但是更新后的state怎么影响view呢？这就用到了<code>connect()</code>函数。</p>
+
+<p>connect主要职责是把store中的state树转化为props、提供<code>dispatch</code>、<code>getState</code>方法。理论上任意一个组件都可以connect到store。但不推荐这么使用，因为这样会让数据流难以掌控。所以connect的组件级别越高越好。然后里面的组件都是死的。通过props依次传递下去。建议connect的组件停留在layout或者page层。</p>
+
+<p>以<code>src/pages/HelloworldPage.js</code>为例</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, {Component} from "react";
+</span><span class='line'>import { connect } from 'react-redux';
+</span><span class='line'>
+</span><span class='line'>function mapStateToProps(state) {
+</span><span class='line'>  return {
+</span><span class='line'>    count: state.count
+</span><span class='line'>  };
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>class HelloWorldPage extends Component {
+</span><span class='line'>  //组件内容
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export default connect(mapStateToProps)(HelloWorldPage);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>mapStateToProps</code> 这个函数主要做了一件事，把state树上的数据去下来绑定到props上。这样<code>this.props.count</code>就可以访问了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[5. Redux基础知识]]></title>
+    <link href="http://xuxiangyang.github.io/blog/2016/02/28/react-5/"/>
+    <updated>2016-02-28T00:53:58+08:00</updated>
+    <id>http://xuxiangyang.github.io/blog/2016/02/28/react-5</id>
+    <content type="html"><![CDATA[<p>Redux不像MVC，给人的感觉更像消息系统。整个的感觉是这样的：</p>
+
+<p>整个应用有一个State，这个State表明了所有的状态，并且只有一个Store存储这个。其余的操作都是action。通过action_creator创建出来一个action，然后dispatch（分发）这个action。然后所有的reducer根据action的type来决定要不要处理这个action。如果要处理，就返回一个新的State。然后Store会根据这个新的State更新State树。然后重新渲染页面。</p>
+
+<p>整个过程看起来是这样的：
+<img src="http://xuxiangyang.github.io/images/posts/20160828/2.png">
+上面说了一些名词，下面说说他们的意思。</p>
+
+<ul>
+<li>State：状态。就是那些可以变的东西。比如说用户的行为、随着时间变化的等。与React中的状态一致。它是一个简单的Object</li>
+<li>Action：行为。用来描述已经发生的事件。意思上更接近做了xx事。也是一个简单的Object。推荐这样设计这个Action
+
+<ul>
+<li>{
+    type: &ldquo;SUBMIT_FORM&rdquo;, //表明action的类型。reducer用来它决定要不要响应这个action
+    payload: { //Action搭载的数据
+      username: &ldquo;test&rdquo;,
+      password: &ldquo;password&rdquo;
+    }
+  }</li>
+</ul>
+</li>
+<li>Dispatch：分发。它其实是一个函数，dispatch是store的一个函数。用来分发action</li>
+<li>Reducer:  处理器。它是将根据Action中的type来决定是否响应，如果响应，会根据当前的State和Action中搭载的数据。产生一个新的State。一个reducer对应这State树中一个分支。所以当前State和新的State都指的是reducer对应的那部分State</li>
+<li>Store: 存储。全局只会有一个Store。存储了State树，并且提供了dispatch、getState等方法</li>
+</ul>
+
+
+<p>Redux有三个原则：</p>
+
+<ol>
+<li>单一数据源：整个应用的state被存储到一颗object tree中。并且这个object tree 存在于唯一一个store中</li>
+<li>State是只读的：唯一能够改变State的做法就是触发Action。</li>
+<li>用纯函数来执行修改：Reducer用来描述action如何修改State树。</li>
+</ol>
+
+
+<p>纯函数的意思是这样的：</p>
+
+<ol>
+<li>里面没有网络请求，不更新数据。就是没有任何对外的影响。</li>
+<li>不改变输入值</li>
+</ol>
+
+
+<p>大致Redux总的想法就是一套消息系统，然后配合上状态机的使用。核心的事情有以下这些：</p>
+
+<ol>
+<li>应用有哪些状态</li>
+<li>如何在状态间切换</li>
+</ol>
+
+
+<p>对于状态间的切换，它用的方式是消息。也就是Action。我们的View只需要这两个职责</p>
+
+<ol>
+<li>根据状态决定如何显示</li>
+<li>通知Redux发生了xx事</li>
+</ol>
+
+
+<p>这是一个非常非常好的设计。干净，清晰。随着我们的应用复杂度提升，Redux的开发复杂度也能实现线性增长。而不是像MVC，会成n<sup>2</sup>甚至指数增长。</p>
+
+<p>Redux项目地址：<a href="https://github.com/rackt/redux">https://github.com/rackt/redux</a> 非官方Flux实现方案，Star数超过11K，非常厉害。</p>
+
+<p>另外，可以去看看Facebook官方的Flux，思想很接近。不要来说服我用官方Flux。。。
+不用Flux原因有以下几个：</p>
+
+<ol>
+<li>最重要的，David用了Redux。Flux和Redux是两套东西。后续我们的路由等等也会用Redux来做。选择了Flux意味着所有东西都要自己去尝试。没有大神腿可以抱</li>
+<li>官方的Flux点赞数没有Redux高</li>
+<li>Redux更清晰，更干净。Flux也在越来越像Redux</li>
+<li>鉴于我们的前端水平如此之弱，选择哪个其实都是一样的。我觉得我们是没有能力判断到底哪个好的。所以根据1、2两条原因。我们会只用Redux</li>
+</ol>
+
+
+<p>推荐个中文资料
+<a href="https://camsong.github.io/redux-in-chinese/index.html">https://camsong.github.io/redux-in-chinese/index.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[4. 一个基础的React框架雏形]]></title>
     <link href="http://xuxiangyang.github.io/blog/2016/02/19/react-4/"/>
     <updated>2016-02-19T16:26:14+08:00</updated>
     <id>http://xuxiangyang.github.io/blog/2016/02/19/react-4</id>
-    <content type="html"><![CDATA[<p>代码在  <a href="http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/basic_frame">react_start_kit</a>的basic_frame tag上</p>
+    <content type="html"><![CDATA[<p>代码在  <a href="http://github.com/xuxiangyang/react_start_kit_simple/commits/basic_frame">react_start_kit</a>的basic_frame tag上</p>
 
 <p>大致文件结构组织如下。</p>
 
@@ -292,7 +859,8 @@ state是什么呢？所谓状态，其实一般就是受用户行为影响的、
 
 
 <p>效果如
-[Image: file:///-/blob/JIHAAAqTc9C/6K58Jv6gf78ZNVLQOuNbTg]但你会发现这个input不能输入，不能删除。这个原因是<strong>React的数据是单向绑定的</strong>。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
+<img src="http://xuxiangyang.github.io/images/posts/20160828/1.png">
+但你会发现这个input不能输入，不能删除。这个原因是<strong>React的数据是单向绑定的</strong>。我们的输入其实是改变了input的value，但是并没有改变这个组件的state。所以这个value也不会改变。所以最常见的做法就是重写input的onChange函数，让它去修改这个组件的state
 下面会用ref来选取到input，它的作用和css选择器相当。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -595,7 +1163,7 @@ state是什么呢？所谓状态，其实一般就是受用户行为影响的、
 </span><span class='line'>);</span></code></pre></td></tr></table></div></figure>
 
 
-<p>这些例子都可以在 <strong><a href="http://gitlab.kechenggezi.com/root/react_start_kit_simple/commits/hello_world">react_start_kit_simple</a> 中尝试。使用hello_world这个tag下的代码</strong></p>
+<p>这些例子都可以在 <strong><a href="http://github.com/xuxiangyang/react_start_kit_simple/commits/hello_world">react_start_kit_simple</a> 中尝试。使用hello_world这个tag下的代码</strong></p>
 
 <p>有一些原则，不要修改this.props。永远使用父组件传递下来的props会让你的组件更加简单稳定。组件最好的状态就是一个“死”组件。</p>
 ]]></content>

@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>7. Redux中的Action - 徐向阳</title>
+  <meta name="author" content="徐向阳">
+
+  
+  <meta name="description" content="什么是Action Action描述的是一个动作。大致形式如下： 1
+2
+3
+4
+{ type: 动作类型, payload: 数据
+} 这个type标识动作是什么，reducer根据这个type决定要不要处理。payload是携带的数据。比如说我们描述提交了一个Form，那么这个type就是“ &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?10a2b5c957044f44e5c82e0be850636b";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2016/02/28/react-7/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="徐向阳" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="/stylesheets/fonts.css" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">徐向阳</a></h1>
+  
+    <h2>菜鸡中的战斗机</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="xuxiangyang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">7. Redux中的Action</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-02-28T01:04:02+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:04 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>什么是Action</h2>
+
+<p>Action描述的是一个动作。大致形式如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  type: 动作类型,
+</span><span class='line'>  payload: 数据
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个type标识动作是什么，reducer根据这个type决定要不要处理。payload是携带的数据。比如说我们描述提交了一个Form，那么这个type就是“提交Form”，而payload就是Form中用户填写的数据。</p>
+
+<p>action的实现中分两类。一类是同步Action，一类是异步Action。</p>
+
+<ul>
+<li>同步Action：没有网络请求。动作发生了马上就结束，不存在这个动作正在进行中这个过程。</li>
+<li>异步Action：一般为网络请求。一个动作发生了，会分为动作发生了、动作进行中、动作结束这三个过程。</li>
+</ul>
+
+
+<h2>同步Action</h2>
+
+<p>同步Action比较基础，dispatch action, reducer直接返回新的state，更新UI。</p>
+
+<p>举个例子，<a href="http://github.com/xuxiangyang/react_start_kit_simple">react_start_kit</a> 项目，我们点击Increase number，调用action creator的increase函数生成一个action，然后dispatch action，这时候reducer接收到action，执行state+1，返回新的state，更新UI，这就是一个同步action。</p>
+
+<p>在view中，我们通过调用disptatch分发这个action。在<code>src/pages/HelloWorldPage.js</code>里可以找到类似的话</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>increaseCount() {
+</span><span class='line'>    this.props.dispatch(increase())
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面调用了increase()函数。这是一个action的creator。在<code>src/action_creators/count.js.</code>”中我们定义了自己的action。同步的Action只返回一个新的对象。因为我们只是让它增1，所以没有设置payload。你可以尝试这加一个payload，实现增加任意的数字。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function increase() {
+</span><span class='line'>    return {
+</span><span class='line'>        type: "INCREASE"
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>reducer</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function(state = 1, action) {
+</span><span class='line'>    switch(action.type) {
+</span><span class='line'>        case "INCREASE":
+</span><span class='line'>            return state + 1
+</span><span class='line'>        default:
+</span><span class='line'>            return state;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果我们要开发一个异步的引用，应该怎么处理呢？</p>
+
+<p>举个例子，异步网络请求，首先有发起请求的时刻，还有请求成功或者请求失败的时刻。这些时刻，我们可能需要更新应用的状态，也就是state，比如显示加载中，加载完成，加载失败。既然要更新state，就需要dispatch action，reducer返回新的state。所以我们需要为发起请求，请求成功，请求失败定义action。</p>
+
+<p>我们可以把这些action统一为一个action，内部用status区分，不过redux建议定义为不同的action，比如POSTS_REQUEST，POSTS_FAILURE，POSTS_SUCCESS。</p>
+
+<p>写到这里，你可能会问，异步在哪呢，定义的这些Action和上面的Increase number的Action还是一样啊。确实一样，这些都是同步Action。</p>
+
+<h2>异步Action</h2>
+
+<p>接下来要说的异步Action就会把上面的同步Action和网络请求结合起来。</p>
+
+<p>上面我们写的action creator的函数都是返回一个action对象，不能完成异步网络请求，接下来我们引入 Redux Thunk middleware，用来扩展action creator的功能。</p>
+
+<p>解释一下middleware，node服务端框架常用，就是嵌入在框架接收请求到产生响应过程之中的代码。简单说middleware就是帮我们完成某些工作，并且可以链式组合多个独立的middleware。</p>
+
+<p>Redux middleware类似，它提供的是位于action被发起之后，到达reducer之前的扩展。</p>
+
+<p>引入Redux Thunk middleware之后，action creator不仅可以返回action对象，还可以返回函数，当action creator返回函数时，这个函数会被Redux Thunk middleware执行。</p>
+
+<p>既然返回的是函数，我们就可以在函数里面做需要的工作，比如异步网络请求，并且我们可以在这个函数里面dispatch其他的action，既可以是上面的同步的action，也可以是其他异步的action，是不是快连起来了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import fetch from 'isomorphic-fetch'
+</span><span class='line'>
+</span><span class='line'>export function requestPosts() {
+</span><span class='line'>  return {
+</span><span class='line'>    type: "REQUEST_POSTS"
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export function receivePosts(posts) {
+</span><span class='line'>  return {
+</span><span class='line'>    type: "RECEIVE_POSTS",
+</span><span class='line'>    payload: {
+</span><span class='line'>      posts: posts
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export function errorPosts() {
+</span><span class='line'>  return {
+</span><span class='line'>    type: "POSTS_FAILURE"
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export function fetchPosts() {
+</span><span class='line'>    return function (dispatch) {
+</span><span class='line'>        dispatch(requestPosts());
+</span><span class='line'>        return fetch("http://www.reddit.com/r/reactjs.json", {
+</span><span class='line'>          method: "get"
+</span><span class='line'>        }).then(function (response) {
+</span><span class='line'>            return response.json();
+</span><span class='line'>        }).then(function (json) {
+</span><span class='line'>            var posts = json.data.children.map(child =&gt; child.data)
+</span><span class='line'>            return dispatch(receivePosts(posts));
+</span><span class='line'>        }).catch(function (error) {
+</span><span class='line'>            return dispatch(errorPosts());
+</span><span class='line'>        });
+</span><span class='line'>    };
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们在返回的函数里面执行了fetch异步网络请求，请求之前，先dispatch一个REQUEST_POSTS的action，请求完成的时候，dispatch一个RECEIVE_POSTS的action，请求失败的时候，dispatch一个POSTS_FAILURE的action，reducer会分别处理这些action，返回相应的新的status，更新UI。</p>
+
+<p>解释一下fetch，它是替代 XMLHttpRequest 用来发送网络请求的非常新的 API。由于目前大多数浏览器原生还不支持它，建议你使用 isomorphic-fetch 库。它和jquery的async相比，异步任务采用promise链式调用，减少嵌套，代码清晰。</p>
+
+<p><strong>如何引入 Redux Thunk middleware</strong></p>
+
+<p>上面我们提到了引入Redux Thunk middleware来看扩展action creator的功能，那么如何引入呢？</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const store = compose(
+</span><span class='line'>    applyMiddleware(thunk),
+</span><span class='line'>    reduxReactRouter({ createHistory: createBrowserHistory })
+</span><span class='line'>)(createStore)(App);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>index.js文件里，我们创建store时，用了applyMiddleware(thunk)，就是引入了Thunk，然后就可以在action creator返回函数了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐向阳</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-02-28T01:04:02+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:04 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/react/'>react</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/28/react-6/" title="Previous Post: 6. Redux中的Store和reducer">&laquo; 6. Redux中的Store和reducer</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/02/28/hole-of-react/" title="Next Post: React经验">React经验 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/hole-of-react/">React经验</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-7/">7. Redux中的Action</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-6/">6. Redux中的Store和reducer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-5/">5. Redux基础知识</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-4/">4. 一个基础的React框架雏形</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/xuxiangyang">@xuxiangyang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'xuxiangyang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - 徐向阳 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>6. Redux中的Store和reducer - 徐向阳</title>
+  <meta name="author" content="徐向阳">
+
+  
+  <meta name="description" content="Store是唯一的，它整合了reducer。保存了全局唯一个state树
+它有如下职责： 维持应用的state
+提供getState()函数获取state
+提供dispatch(action)函数来改变state
+通过subscribe(listener)注册监听器 可以通过createStore &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?10a2b5c957044f44e5c82e0be850636b";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <link rel="canonical" href="http://xuxiangyang.github.io/blog/2016/02/28/react-6/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="徐向阳" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="/stylesheets/fonts.css" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">徐向阳</a></h1>
+  
+    <h2>菜鸡中的战斗机</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="xuxiangyang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">6. Redux中的Store和reducer</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-02-28T01:02:45+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:02 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Store是唯一的，它整合了reducer。保存了全局唯一个state树
+它有如下职责：</p>
+
+<ol>
+<li>维持应用的state</li>
+<li>提供<code>getState()</code>函数获取state</li>
+<li>提供<code>dispatch(action)</code>函数来改变state</li>
+<li>通过<code>subscribe(listener)</code>注册监听器</li>
+</ol>
+
+
+<p>可以通过<code>createStore()</code>根据已有的reducers来创建一个store。reducer是根据action和当前的state返回新的state的纯函数。当逻辑很复杂时，我们不是去创建多个store，每个store存储对应的state。而是拆分reducers。数据只有一份，但是会有各种各样的处理方式。
+创建一个store的代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import { createStore } from 'redux'
+</span><span class='line'>import App from './reducers' //reducers集合
+</span><span class='line'>const store = createStore(App)</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>subscribe()</code>函数是用来监听state改变的。如果注册了监听器。那么每次state改变都会调用监听器。</p>
+
+<p>参考代码 <a href="http://github.com/xuxiangyang/react_start_kit_simple/commits/redux">http://github.com/xuxiangyang/react_start_kit_simple/commits/redux</a></p>
+
+<p>你会在<code>src/index.js</code>里面看到类似的代码。但是有些不同里面的代码是这样的</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const store = compose(
+</span><span class='line'>  applyMiddleware(thunk),
+</span><span class='line'>  reduxReactRouter({ createHistory: createBrowserHistory })
+</span><span class='line'>)(createStore)(App);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个是加了路由。我们的路由用的是redux-router。它是对于react-router的一层封装。它将路由状态放在store中。</p>
+
+<p>我们再看看reducers的大概实现</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import { combineReducers } from 'redux';
+</span><span class='line'>import { routerStateReducer } from 'redux-router';
+</span><span class='line'>
+</span><span class='line'>import count from "./count"
+</span><span class='line'>
+</span><span class='line'>const App = combineReducers({
+</span><span class='line'>  count: count,
+</span><span class='line'>  router: routerStateReducer
+</span><span class='line'>});
+</span><span class='line'>
+</span><span class='line'>export default App;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个在<code>src/reducers/index.js</code>中。主要是把各个reduer(比如count)组合起来。看这部分：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const App = combineReducers({
+</span><span class='line'>  count: count,
+</span><span class='line'>  router: routerStateReducer
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中的hash，就对应了之后的state树结构。上面的state树会长成这样</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  count: xx,
+</span><span class='line'>  router: xx,
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后我们深入到每个reducer去看下。这里只有一个reduer，叫做count。它在<code>src/reducer/count.js</code>中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export default function(state = 1, action) {
+</span><span class='line'>  switch(action.type) {
+</span><span class='line'>    case "INCREASE":
+</span><span class='line'>      return state + 1
+</span><span class='line'>    default:
+</span><span class='line'>      return state;
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里我们可以看到一个reducer就是一个纯函数。它由一个switch/case子句组成。我们前面讲过，一个好的action是这样设计的。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  type: "action的类型"
+</span><span class='line'>  payload: "action搭载的shu ju"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以看到，reducer就是根据action的类型。然后在根据老的state产生一个新的state。</p>
+
+<p>至此，state已经可以自己更新了。但是更新后的state怎么影响view呢？这就用到了<code>connect()</code>函数。</p>
+
+<p>connect主要职责是把store中的state树转化为props、提供<code>dispatch</code>、<code>getState</code>方法。理论上任意一个组件都可以connect到store。但不推荐这么使用，因为这样会让数据流难以掌控。所以connect的组件级别越高越好。然后里面的组件都是死的。通过props依次传递下去。建议connect的组件停留在layout或者page层。</p>
+
+<p>以<code>src/pages/HelloworldPage.js</code>为例</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import React, {Component} from "react";
+</span><span class='line'>import { connect } from 'react-redux';
+</span><span class='line'>
+</span><span class='line'>function mapStateToProps(state) {
+</span><span class='line'>  return {
+</span><span class='line'>    count: state.count
+</span><span class='line'>  };
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>class HelloWorldPage extends Component {
+</span><span class='line'>  //组件内容
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>export default connect(mapStateToProps)(HelloWorldPage);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>mapStateToProps</code> 这个函数主要做了一件事，把state树上的数据去下来绑定到props上。这样<code>this.props.count</code>就可以访问了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">徐向阳</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-02-28T01:02:45+08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:02 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/react/'>react</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/28/react-5/" title="Previous Post: 5. Redux基础知识">&laquo; 5. Redux基础知识</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/02/28/react-7/" title="Next Post: 7. Redux中的Action">7. Redux中的Action &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/hole-of-react/">React经验</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-7/">7. Redux中的Action</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-6/">6. Redux中的Store和reducer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/28/react-5/">5. Redux基础知识</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/19/react-4/">4. 一个基础的React框架雏形</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/xuxiangyang">@xuxiangyang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'xuxiangyang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - 徐向阳 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
