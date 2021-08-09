@@ -1,4 +1,4 @@
-baseURL = 'http://blog.xuxiangyang.con/'
+baseURL = 'https://xuxiangyang.github.io/'
 languageCode = 'zh-cn'
 defaultContentLanguage = "zh-cn"
 title = 'XXY'
