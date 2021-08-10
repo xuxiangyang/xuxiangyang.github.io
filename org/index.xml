@@ -1,21 +1,180 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Orgs on XXY</title><link>https://blog.xuxiangyang.com/org/</link><description>Recent content in Orgs on XXY</description><generator>Hugo 0.87.0 -- gohugo.io</generator><language>zh-cn</language><managingEditor>xxy@xuxiangyang.com (徐向阳)</managingEditor><webMaster>xxy@xuxiangyang.com (徐向阳)</webMaster><copyright>XXY — All rights reserved.</copyright><lastBuildDate>Mon, 09 Aug 2021 10:59:00 +0800</lastBuildDate><atom:link href="https://blog.xuxiangyang.com/org/index.xml" rel="self" type="application/rss+xml"/><item><title>测试ox-hugo</title><link>https://blog.xuxiangyang.com/org/test-ox-hugo/</link><pubDate>Mon, 09 Aug 2021 10:59:00 +0800</pubDate><author>xxy@xuxiangyang.com (徐向阳)</author><guid isPermaLink="true">https://blog.xuxiangyang.com/org/test-ox-hugo/</guid><description>&lt;h2 id="测试1">测试1&lt;/h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Orgs on XXY</title><link>https://blog.xuxiangyang.com/org/</link><description>Recent content in Orgs on XXY</description><generator>Hugo 0.87.0 -- gohugo.io</generator><language>zh-cn</language><managingEditor>xxy@xuxiangyang.com (徐向阳)</managingEditor><webMaster>xxy@xuxiangyang.com (徐向阳)</webMaster><copyright>XXY — All rights reserved.</copyright><lastBuildDate>Tue, 10 Aug 2021 19:24:00 +0800</lastBuildDate><atom:link href="https://blog.xuxiangyang.com/org/index.xml" rel="self" type="application/rss+xml"/><item><title>使用Org写博客</title><link>https://blog.xuxiangyang.com/org/ox-hugo/</link><pubDate>Tue, 10 Aug 2021 19:24:00 +0800</pubDate><author>xxy@xuxiangyang.com (徐向阳)</author><guid isPermaLink="true">https://blog.xuxiangyang.com/org/ox-hugo/</guid><description>&lt;h2 id="为什么使用org而不直接使用github-pages-markdown">为什么使用Org而不直接使用Github Pages Markdown&lt;/h2>
+&lt;ol>
+&lt;li>我是Emacs用户，使用Spacemacs，日常开发工作主要使用这个工具，并且Spacemacs对于Org支持度很好&lt;/li>
+&lt;li>&lt;a href="https://orgmode.org/org.html">Org&lt;/a> 基本语法表达能力不弱于标准 &lt;a href="https://www.markdownguide.org/basic-syntax/">Markdown&lt;/a>。&lt;/li>
+&lt;li>&lt;a href="https://orgmode.org/org.html#Capture-and-Attachments">Org Capture&lt;/a> + &lt;a href="https://orgmode.org/manual/Agenda-Views.html#Agenda-Views">Agenda Views &lt;/a>可以实现我想在任意的Emacs窗口随时管理我的 TODO、笔记等，自然的我希望博客也可以在这套体系下，关于这套多提。关于这套多提几句，它主要可以实现我如下模型
 &lt;ul>
-&lt;li>测试2&lt;/li>
+&lt;li>在任意的Emacs任意界面随时记录和查看TODO，随意记录后Emacs会自动帮你汇总，这样可以最大限度的降低工作中的打扰&lt;/li>
+&lt;li>Capture 可以自定义Template，可以满足我在不同场景下预制结构&lt;/li>
+&lt;li>用Capture和直接自己去编辑各个org文件是非常不同的感受，你永远不用操心写到一半的东西要保存到哪里，如果找到你写了一半的东西&lt;/li>
 &lt;/ul>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>a&lt;/th>
-&lt;th>b&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>2&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
+&lt;/li>
+&lt;li>我希望能有更多的控制，并且这些控制能充分利用前人经验，Github Page只是暂时的一个方案，它满足目前需求（毕竟我还没有写博客，我希望自己能定期有至少一次的深入思考），但灵活性就会有所下降，我不希望未来整个网站和Github必须绑死。&lt;/li>
+&lt;/ol>
+&lt;h2 id="如何选取-org-博客方案">如何选取 Org 博客方案&lt;/h2>
+&lt;p>我参考了 &lt;a href="https://orgmode.org/worg/org-blog-wiki.html">Blogs and Wikis with Org&lt;/a> 最终选择了 &lt;code>ox-hugo&lt;/code> ，主要考虑了如下几点：&lt;/p>
+&lt;ol>
+&lt;li>有丰富主题可供选择，我希望找一个简单的但是还算是有过设计的主题&lt;/li>
+&lt;li>使用的人要多，而且仍要在维护，这样踩坑就少&lt;/li>
+&lt;li>文档丰富，使用起来简单&lt;/li>
+&lt;/ol>
+&lt;p>基于以上几点过滤完，其实剩下的考虑就是在 &lt;code>Jekyll&lt;/code> 和 &lt;code>Hugo&lt;/code> 间了，因为以前听说过Hugo，所以就随意选择了Hugo方向了。通过尝试原生 org 感觉起来支持度不能满足我需求，并且没有如何天然配合Capture使用，所以 &lt;code>ox-hugo&lt;/code> 就成了最终方案。当然，事实证明 &lt;code>ox-hugo&lt;/code> 就恰恰是我想要的&lt;/p>
+&lt;h2 id="如何搭建起整个博客">如何搭建起整个博客&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>在Spacemacs中添加 &lt;code>org&lt;/code> layer，并且启用 &lt;code>org-enable-hugo-support&lt;/code> 之后重启Spacemacs&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-emacs-lisp" data-lang="emacs-lisp">&lt;span class="p">(&lt;/span>&lt;span class="nb">defun&lt;/span> &lt;span class="nv">dotspacemacs/layers&lt;/span> &lt;span class="p">()&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nb">setq-default&lt;/span>
+&lt;span class="nv">dotspacemacs-configuration-layers&lt;/span>
+&lt;span class="o">&amp;#39;&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nv">org&lt;/span> &lt;span class="nb">:variables&lt;/span>
+&lt;span class="nv">org-enable-github-support&lt;/span> &lt;span class="no">t&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>安装 &lt;a href="https://gohugo.io/">Hugo&lt;/a>，已Mac为例&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">brew install hugo
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>使用Hugo创建博客地址，假设创建在 &lt;code>~/blog&lt;/code> 目录下&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">hugo new site blog
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>[可选] 根据上一步命令行输出可以配置 &lt;code>Theme&lt;/code> 等信息&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>为 Org Capture 增加 Blog 模板&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;a href="https://ox-hugo.scripter.co/">ox-hugo&lt;/a> 默认支持2中模式 &lt;code>One post per Org subtree&lt;/code> 和 &lt;code>One post per Org file&lt;/code> ，我选择了 &lt;code>One post per Org subtree&lt;/code> 这样我的配置不需要各个文件都去配置，并且这样配置的 Capture 模板更简单些。Org本身的Subtree设计能够让我专注在某一篇文章中，并且暂时我的文章数肯定不会多到在同一个文件中出现什么性能问题，所以这个模式目前是合理的。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>我的 org 目录在 &lt;code>~/org&lt;/code> 下，我希望 blog 的 Org 文件和其他任务、笔记等隔离，创建了 &lt;code>~/org/blog.org&lt;/code> 文件来专门做博客，添加如下开头&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-org" data-lang="org">&lt;span class="cs">#+HUGO_BASE_DIR&lt;/span>&lt;span class="c">: ~/blog&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>为Captrue增加Blog模板&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-emacs-lisp" data-lang="emacs-lisp">&lt;span class="p">(&lt;/span>&lt;span class="nb">defun&lt;/span> &lt;span class="nv">dotspacemacs/user-config&lt;/span> &lt;span class="p">()&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nb">with-eval-after-load&lt;/span> &lt;span class="ss">&amp;#39;org-capture&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nb">defun&lt;/span> &lt;span class="nv">org-hugo-new-subtree-post-capture-template&lt;/span> &lt;span class="p">()&lt;/span>
+&lt;span class="s">&amp;#34;Returns &lt;/span>&lt;span class="ss">`org-capture&amp;#39;&lt;/span>&lt;span class="s"> template string for new Hugo post.
+&lt;/span>&lt;span class="s">See &lt;/span>&lt;span class="ss">`org-capture-templates&amp;#39;&lt;/span>&lt;span class="s"> for more information.&amp;#34;&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nb">let*&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="nv">title&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nf">read-from-minibuffer&lt;/span> &lt;span class="s">&amp;#34;Title: &amp;#34;&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">;Prompt to enter the post title&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nv">fname&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">org-hugo-slug&lt;/span> &lt;span class="nv">title&lt;/span>&lt;span class="p">)))&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nf">mapconcat&lt;/span> &lt;span class="nf">#&amp;#39;identity&lt;/span>
+&lt;span class="o">`&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;span class="o">,&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">concat&lt;/span> &lt;span class="s">&amp;#34;* TODO &amp;#34;&lt;/span> &lt;span class="nv">title&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="s">&amp;#34;:PROPERTIES:&amp;#34;&lt;/span>
+&lt;span class="o">,&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">concat&lt;/span> &lt;span class="s">&amp;#34;:EXPORT_FILE_NAME: &amp;#34;&lt;/span> &lt;span class="nv">fname&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="s">&amp;#34;:END:&amp;#34;&lt;/span>
+&lt;span class="s">&amp;#34;%?\n&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">;Place the cursor here finally&lt;/span>
+&lt;span class="s">&amp;#34;\n&amp;#34;&lt;/span>&lt;span class="p">)))&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nv">add-to-list&lt;/span> &lt;span class="ss">&amp;#39;org-capture-templates&lt;/span>
+&lt;span class="o">&amp;#39;&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;b&amp;#34;&lt;/span> &lt;span class="c1">;`org-capture&amp;#39; binding + h&lt;/span>
+&lt;span class="s">&amp;#34;Blog&amp;#34;&lt;/span>
+&lt;span class="nv">entry&lt;/span>
+&lt;span class="c1">;; It is assumed that below file is present in `org-directory&amp;#39;&lt;/span>
+&lt;span class="c1">;; and that it has a &amp;#34;Blog Ideas&amp;#34; heading. It can even be a&lt;/span>
+&lt;span class="c1">;; symlink pointing to the actual location of notes.org!&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nv">file&lt;/span> &lt;span class="s">&amp;#34;blog.org&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nb">function&lt;/span> &lt;span class="nv">org-hugo-new-subtree-post-capture-template&lt;/span>&lt;span class="p">)))&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>尝试使用 Org Capture 写一篇文章，最终有一篇文章的Org文件内容如下&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-text" data-lang="text">#+HUGO_BASE_DIR: ~/blog
+​* TODO Test
+:PROPERTIES:
+:EXPORT_FILE_NAME: test
+:EXPORT_HUGO_SECTION: org
+:EXPORT_HUGO_TAGS: test
+:EXPORT_HUGO_CATEGORIES: org
+:END:
+** 二级标题
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>里面有一些propertie的意思如下&lt;/p>
 &lt;ul>
-&lt;li>测试3&lt;/li>
-&lt;/ul></description></item></channel></rss>
+&lt;li>&lt;code>#+HUGO_BASE_DIR&lt;/code> 这个是对所有文章都生效的配置，指出 &lt;code>blog&lt;/code> 这个 Hugo 项目的Path&lt;/li>
+&lt;li>&lt;code>EXPORT_FILE_NAME&lt;/code> 这个是文章mardown的文件名&lt;/li>
+&lt;li>&lt;code>EXPORT_HUGO_SECTION&lt;/code> 这个是文章所在的子目录，我希望不同 CATEGORIE 的文章可以按子目录划分&lt;/li>
+&lt;li>&lt;code>EXPORT_HUGO_TAGS&lt;/code> 文章标签，可以支持多个&lt;/li>
+&lt;li>&lt;code>EXPORT_HUGO_CATEGORIES&lt;/code> 文章类型，也支持多个，但是我希望一个文章属于一个类型，有多个标签&lt;/li>
+&lt;/ul>
+&lt;p>上面的配置实际效果将是导出的 markdown 将存储在 &lt;code>~/blog/content/org/test.md&lt;/code> 上，最终文章的URL将是 &lt;code>{HUGO_HOST}/org/test&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>写作完成后要把 &lt;code>Test&lt;/code> 处的 &lt;code>TODO&lt;/code> ，通过 &lt;code>C-c C-c&lt;/code> 标记为 &lt;code>DONE&lt;/code> ，否则会认为这个文章为 &lt;code>草稿&lt;/code> 状态，Hugo 不显示&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 Org 文件中 &lt;code>Test&lt;/code> 文章 SubTree 执行导出 &lt;code>, e e H H&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>进入 blog 目录，执行 &lt;code>hugo server&lt;/code> 就可以看到效果了&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>进行到上述步骤 Org 和 Hugo之间的交互就通了，下面讲展示如何使用 GitHub Pages 显示 Hugo 编译出的内容，参考的是 &lt;a href="https://gohugo.io/hosting-and-deployment/hosting-on-github/">Hugo Host on Github&lt;/a>&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>在Github 创建 你用户名的 repository，已我自己举例，我创建了一个 &lt;a href="https://github.com/xuxiangyang/xuxiangyang.github.io">xuxiangyang.github.io&lt;/a> 的项目，这个项目需要是Public（否则开通Page需要额外付费）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>进入Blog项目，添加 &lt;code>.github/workflows/gh-pages.yml&lt;/code> 文件，用Github Action 自动生成博客&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">github pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="l">​ - main &lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># Set a branch to deploy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">pull_request&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">deploy&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-20.04&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">&lt;/span>&lt;span class="nt">​ - uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># Fetch Hugo themes (true OR recursive)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># Fetch all history for .GitInfo and .Lastmod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup Hugo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-hugo@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;latest&amp;#39;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># extended: true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">hugo --minify&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-gh-pages@v3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">if&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">github.ref == &amp;#39;refs/heads/main&amp;#39;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">github_token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.GITHUB_TOKEN }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">publish_dir&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>为 Blog 项目添加Git托管&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">git init
+git add .
+git commit -m &lt;span class="s1">&amp;#39;commit with first test post&amp;#39;&lt;/span>
+git branch -M main
+git remote add origin git@github.com:xuxiangyang/test.git
+git push -u origin main
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>在Github看这个项目的Actions，等待Action运行成功，这个Action的原理是利用 &lt;code>main&lt;/code> 分支的 Hugo 源码，编译成HTML静态文件，合并到=gh-pages=分支&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在Github上 Settings -&amp;gt; Pages，修改 Source Branch为 &lt;code>gh-pages&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>等待一段时间应该就可以了&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ol></description></item></channel></rss>
