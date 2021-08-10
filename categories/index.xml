@@ -1,1 +1,24 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Categories on XXY</title><link>https://blog.xuxiangyang.com/categories/</link><description>Recent content in Categories on XXY</description><generator>Hugo 0.87.0 -- gohugo.io</generator><language>zh-cn</language><managingEditor>xxy@xuxiangyang.com (徐向阳)</managingEditor><webMaster>xxy@xuxiangyang.com (徐向阳)</webMaster><copyright>XXY — All rights reserved.</copyright><lastBuildDate>Tue, 10 Aug 2021 19:24:00 +0800</lastBuildDate><atom:link href="https://blog.xuxiangyang.com/categories/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Categories on XXY</title>
+    <link>https://blog.xuxiangyang.com/categories/</link>
+    <description>Recent content in Categories on XXY</description>
+    <image>
+      <url>https://blog.xuxiangyang.com/static/images/logo.png</url>
+      <link>https://blog.xuxiangyang.com/static/images/logo.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 10 Aug 2021 19:24:00 +0800</lastBuildDate><atom:link href="https://blog.xuxiangyang.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>org</title>
+      <link>https://blog.xuxiangyang.com/categories/org/</link>
+      <pubDate>Tue, 10 Aug 2021 19:24:00 +0800</pubDate>
+      
+      <guid>https://blog.xuxiangyang.com/categories/org/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>XXY</title>
-    <link>https://blog.xuxiangyang.com/</link>
-    <description>Recent content on XXY</description>
+    <title>Posts on XXY</title>
+    <link>https://blog.xuxiangyang.com/posts/</link>
+    <description>Recent content in Posts on XXY</description>
     <image>
       <url>https://blog.xuxiangyang.com/static/images/logo.png</url>
       <link>https://blog.xuxiangyang.com/static/images/logo.png</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 10 Aug 2021 19:24:00 +0800</lastBuildDate><atom:link href="https://blog.xuxiangyang.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Aug 2021 19:24:00 +0800</lastBuildDate><atom:link href="https://blog.xuxiangyang.com/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用Org写博客</title>
       <link>https://blog.xuxiangyang.com/posts/org/ox-hugo/</link>
@@ -22,8 +22,6 @@
 如何搭建起整个博客   在Spacemacs中添加 org layer，并且启用 org-enable-hugo-support 之后重启Spacemacs
 (defun dotspacemacs/layers () (setq-default dotspacemacs-configuration-layers &amp;#39;( (org :variables org-enable-github-support t ) ) ) )   安装 Hugo，已Mac为例</description>
     </item>
-    
-    
     
   </channel>
 </rss>
