@@ -62,6 +62,7 @@ draft = false
 
         ```org
         #+HUGO_BASE_DIR: ~/blog
+        #+HUGO_SECTION: posts
         ```
     3.  为Captrue增加Blog模板
 
@@ -97,10 +98,11 @@ draft = false
 
     ```text
     #+HUGO_BASE_DIR: ~/blog
+    #+HUGO_SECTION: posts
     ​* TODO Test
       :PROPERTIES:
       :EXPORT_FILE_NAME: test
-      :EXPORT_HUGO_SECTION: org
+      :EXPORT_HUGO_BUNDLE: org
       :EXPORT_HUGO_TAGS: test
       :EXPORT_HUGO_CATEGORIES: org
       :END:
@@ -111,11 +113,11 @@ draft = false
 
     -   `#+HUGO_BASE_DIR` 这个是对所有文章都生效的配置，指出 `blog` 这个 Hugo 项目的Path
     -   `EXPORT_FILE_NAME` 这个是文章mardown的文件名
-    -   `EXPORT_HUGO_SECTION` 这个是文章所在的子目录，我希望不同 CATEGORIE 的文章可以按子目录划分
+    -   `EXPORT_HUGO_BUNDLE` 这个是文章所在的子目录，我希望不同 CATEGORIE 的文章可以按子目录划分
     -   `EXPORT_HUGO_TAGS` 文章标签，可以支持多个
     -   `EXPORT_HUGO_CATEGORIES` 文章类型，也支持多个，但是我希望一个文章属于一个类型，有多个标签
 
-    上面的配置实际效果将是导出的 markdown 将存储在 `~/blog/content/org/test.md` 上，最终文章的URL将是 `{HUGO_HOST}/org/test`
+    上面的配置实际效果将是导出的 markdown 将存储在 `~/blog/content/posts/org/test.md` 上，最终文章的URL将是 `{HUGO_HOST}/posts/org/test`
 7.  写作完成后要把 `Test` 处的 `TODO` ，通过 `C-c C-c` 标记为 `DONE` ，否则会认为这个文章为 `草稿` 状态，Hugo 不显示
 8.  在 Org 文件中 `Test` 文章 SubTree 执行导出 `, e e H H`
 9.  进入 blog 目录，执行 `hugo server` 就可以看到效果了

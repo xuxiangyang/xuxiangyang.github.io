@@ -1,0 +1,104 @@
+baseURL: "https://blog.xuxiangyang.com/"
+title: "XXY"
+theme: "PaperMod"
+languageCode: "en"
+defaultContentLanguage: "en"
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+
+minify:
+  disableXML: true
+    # minifyOutput: true
+
+languages:
+  en:
+    languageName: "English"
+    weight: 1
+    menu:
+      main:
+        - name: Archive
+          url: archives
+          weight: 10
+        - name: Categories
+          url: categories/
+          weight: 20
+        - name: Tags
+          url: tags/
+          weight: 30
+        - name: Search
+          url: search/
+          weight: 40
+
+outputs:
+    home:
+        - HTML
+        - RSS
+        - JSON
+params:
+  env: production
+  description: "博客"
+  author: XXY
+  defaultTheme: auto
+  ShowShareButtons: true
+  ShowReadingTime: true
+  displayFullLangName: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowToc: true
+  images:
+    - static/images/logo.png
+  profileMode:
+    enabled: false
+    title: 徐向阳
+    imageUrl: "https://oss.laoyouzhibo.com/square/cdn/images/9fef097c11964310a5380a33d6872a3d.png"
+    imageTitle: xxy
+    buttons:
+      - name: Archives
+        url: archives
+      - name: Tags
+        url: tags
+  homeInfoParams:
+    Title: XXY
+    Content: "博客\n"
+  socialIcons:
+    - name: github
+      url: "https://github.com/xuxiangyang"
+    - name: RsS
+      url: index.xml
+  editPost:
+    URL: "https://github.com/xuxiangyang/xuxiangyang.github.io/tree/main/content/"
+    Text: Suggest Changes
+    appendFilePath: true
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+privacy:
+  vimeo:
+    disabled: false
+    simple: true
+  twitter:
+    disabled: false
+    enableDNT: true
+    simple: true
+  instagram:
+    disabled: false
+    simple: true
+  youtube:
+    disabled: false
+    privacyEnhanced: true
+services:
+  instagram:
+    disableInlineCSS: true
+  twitter:
+    disableInlineCSS: true
