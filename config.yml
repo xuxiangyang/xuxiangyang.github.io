@@ -10,6 +10,7 @@ buildDrafts: false
 buildFuture: false
 buildExpired: false
 enableEmoji: true
+disqusShortname: "xxy-blog"
 
 minify:
   disableXML: true
@@ -51,6 +52,7 @@ params:
   ShowBreadCrumbs: true
   ShowCodeCopyButtons: true
   ShowToc: true
+  comments: true
   images:
     - static/images/logo.png
   profileMode:
