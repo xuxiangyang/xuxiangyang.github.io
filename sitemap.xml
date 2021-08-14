@@ -2,22 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://blog.xuxiangyang.com/tags/arduino/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
     <loc>https://blog.xuxiangyang.com/categories/</loc>
-    <lastmod>2021-08-10T19:24:00+08:00</lastmod>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.xuxiangyang.com/tags/diy/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.xuxiangyang.com/categories/diy/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.xuxiangyang.com/posts/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.xuxiangyang.com/tags/raspberrypi/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.xuxiangyang.com/tags/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.xuxiangyang.com/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.xuxiangyang.com/posts/diy/%E5%A6%82%E4%BD%95%E7%94%A8raspberrypi%E6%8E%A7%E5%88%B6arduino/</loc>
+    <lastmod>2021-08-14T14:39:00+08:00</lastmod>
   </url><url>
     <loc>https://blog.xuxiangyang.com/tags/hugo/</loc>
     <lastmod>2021-08-10T19:24:00+08:00</lastmod>
   </url><url>
     <loc>https://blog.xuxiangyang.com/categories/org/</loc>
-    <lastmod>2021-08-10T19:24:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.xuxiangyang.com/posts/</loc>
-    <lastmod>2021-08-10T19:24:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.xuxiangyang.com/tags/</loc>
-    <lastmod>2021-08-10T19:24:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.xuxiangyang.com/</loc>
     <lastmod>2021-08-10T19:24:00+08:00</lastmod>
   </url><url>
     <loc>https://blog.xuxiangyang.com/posts/org/ox-hugo/</loc>
