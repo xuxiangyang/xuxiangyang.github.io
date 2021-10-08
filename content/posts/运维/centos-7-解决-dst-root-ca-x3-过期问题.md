@@ -8,9 +8,13 @@ draft = false
 +++
 
 [2021年9月30日 Let's Encrypt的DST Root CA X3 证书过期了](https://letsencrypt.org/docs/dst-root-ca-x3-expiration-september-2021/)。
+
 给我的实际影响是 使用 <https://gems.ruby-china.com> 没办法安装gem，会报ssl错误。
+
 如果你是openssl 1.1.0 不会遇到这个问题，但centos 7 (我的版本是7.3.1611) 默认安装的是 openssl 1.0.2。
+
 如果机器少，你可以根据 openssl 的[博客](https://www.openssl.org/blog/blog/2021/09/13/LetsEncryptRootCertExpire/) 手动修改证书。
+
 但我的机器多，手动修改证书也很怕出错，所以可以执行下面的命令
 
 ```bash
