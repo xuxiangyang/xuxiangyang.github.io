@@ -11,6 +11,7 @@ buildFuture: false
 buildExpired: false
 enableEmoji: true
 disqusShortname: "xxy-blog"
+googleAnalytics: "XXY-blog"
 
 minify:
   disableXML: true
@@ -77,6 +78,9 @@ params:
     URL: "https://github.com/xuxiangyang/xuxiangyang.github.io/tree/main/content/"
     Text: Suggest Changes
     appendFilePath: true
+  analytics:
+    google:
+      SiteVerificationTag: "G-9SWNWE7S7J"
 taxonomies:
   category: categories
   tag: tags
