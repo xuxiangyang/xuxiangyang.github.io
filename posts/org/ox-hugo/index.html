@@ -22,6 +22,8 @@
 <meta name=theme-color content="#2e2e33">
 <meta name=msapplication-TileColor content="#2e2e33">
 <meta name=generator content="Hugo 0.88.1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9SWNWE7S7J"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9SWNWE7S7J',{anonymize_ip:!1})}</script>
 <meta property="og:title" content="使用Org写博客">
 <meta property="og:description" content="为什么使用Org而不直接使用Github Pages Markdown  我是Emacs用户，使用Spacemacs，日常开发工作主要使用这个工具，并且Spacemacs对于Org支持度很好 Org 基本语法表达能力不弱于标准 Markdown。 Org Capture + Agenda Views 可以实现我想在任意的Emacs窗口随时管理我的 TODO、笔记等，自然的我希望博客也可以在这套体系下，关于这套多提。关于这套多提几句，它主要可以实现我如下模型  在任意的Emacs任意界面随时记录和查看TODO，随意记录后Emacs会自动帮你汇总，这样可以最大限度的降低工作中的打扰 Capture 可以自定义Template，可以满足我在不同场景下预制结构 用Capture和直接自己去编辑各个org文件是非常不同的感受，你永远不用操心写到一半的东西要保存到哪里，如果找到你写了一半的东西   我希望能有更多的控制，并且这些控制能充分利用前人经验，Github Page只是暂时的一个方案，它满足目前需求（毕竟我还没有写博客，我希望自己能定期有至少一次的深入思考），但灵活性就会有所下降，我不希望未来整个网站和Github必须绑死。  如何选取 Org 博客方案 我参考了 Blogs and Wikis with Org 最终选择了 ox-hugo ，主要考虑了如下几点：
  有丰富主题可供选择，我希望找一个简单的但是还算是有过设计的主题 使用的人要多，而且仍要在维护，这样踩坑就少 文档丰富，使用起来简单  基于以上几点过滤完，其实剩下的考虑就是在 Jekyll 和 Hugo 间了，因为以前听说过Hugo，所以就随意选择了Hugo方向了。通过尝试原生 org 感觉起来支持度不能满足我需求，并且没有如何天然配合Capture使用，所以 ox-hugo 就成了最终方案。当然，事实证明 ox-hugo 就恰恰是我想要的

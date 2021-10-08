@@ -27,6 +27,8 @@ import serial if __name__ == '__main__': ser = serial.">
 <meta name=theme-color content="#2e2e33">
 <meta name=msapplication-TileColor content="#2e2e33">
 <meta name=generator content="Hugo 0.88.1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9SWNWE7S7J"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-9SWNWE7S7J',{anonymize_ip:!1})}</script>
 <meta property="og:title" content="如何用RaspberryPI控制Arduino">
 <meta property="og:description" content="方案整体思路 我希望能够通过Arduino来接收感应器和控制舵机等，RaspberryPI来控制网络业务等复杂交互逻辑。Arduino就像一个超级设备，对上层业务隐藏硬件控制细节。所以 Arduino会通过USB链接到RaspberryPI，由RaspberryPI负责Arduino供电。RaspberryPI部分使用Python来做业务代码，通过Serial于Arduino交互。
 环境安装   安装Arduino IDE环境
