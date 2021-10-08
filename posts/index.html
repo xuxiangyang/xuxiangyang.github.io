@@ -76,7 +76,11 @@
 <h2>Centos 7 解决 DST Root CA X3 过期问题</h2>
 </header>
 <section class=entry-content>
-<p>2021年9月30日 Let’s Encrypt的DST Root CA X3 证书过期了。 给我的实际影响是 使用 https://gems.ruby-china.com 没办法安装gem，会报ssl错误。 如果你是openssl 1.1.0 不会遇到这个问题，但centos 7 (我的版本是7.3.1611) 默认安装的是 openssl 1.0.2。 如果机器少，你可以根据 openssl 的博客 手动修改证书。 但我的机器多，手动修改证书也很怕出错，所以可以执行下面的命令
+<p>2021年9月30日 Let’s Encrypt的DST Root CA X3 证书过期了。
+给我的实际影响是 使用 https://gems.ruby-china.com 没办法安装gem，会报ssl错误。
+如果你是openssl 1.1.0 不会遇到这个问题，但centos 7 (我的版本是7.3.1611) 默认安装的是 openssl 1.0.2。
+如果机器少，你可以根据 openssl 的博客 手动修改证书。
+但我的机器多，手动修改证书也很怕出错，所以可以执行下面的命令
 yum update -y ca-certificates && update-ca-trust 至少需要升级到 2021.2.50-72 版本，其实原理是一样的，只是ca-certificates 在2020-06-09的版本移除了DST Root CA X3</p>
 </section>
 <footer class=entry-footer>October 8, 2021&nbsp;·&nbsp;1 min&nbsp;·&nbsp;徐向阳</footer>
