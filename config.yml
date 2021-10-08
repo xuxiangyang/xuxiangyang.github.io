@@ -11,7 +11,7 @@ buildFuture: false
 buildExpired: false
 enableEmoji: true
 disqusShortname: "xxy-blog"
-googleAnalytics: "XXY-blog"
+googleAnalytics: "G-9SWNWE7S7J"
 
 minify:
   disableXML: true
